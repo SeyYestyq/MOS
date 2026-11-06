@@ -38,7 +38,7 @@ export default function App() {
           <h1>Container Activity Map</h1>
           <p>
             Локальный превью-борд для хакатона: дерево процессов + сеть + таймлайн
-            в стиле liquid-metal / topology. Данные — mock сценария reverse-shell.
+            в стиле hackathon-kit/design. Данные — mock reverse-shell.
             В репозиторий OnlyGo не пушится.
           </p>
         </div>

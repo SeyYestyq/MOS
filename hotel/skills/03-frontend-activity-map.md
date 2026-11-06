@@ -1,6 +1,6 @@
 # Frontend Activity Map (P3)
 
-Всё нужное здесь. Не открывать `claude-skills-main` / senior-frontend.
+Всё нужное здесь. Не открывать чужие репозитории за стилем.
 
 ## Зона
 
@@ -9,35 +9,42 @@
 ## Стек (фиксировано)
 
 - Vite + React + TypeScript
-- **`@xyflow/react`** + **`@dagrejs/dagre`** для дерева процессов
-- Типы из OpenAPI BFF (сгенерировать или скопировать вручную один раз)
-- Стиль: токены из `hackathon-kit/design/`
-- **Не** рисовать связи ppid→pid на чистом SVG/Canvas/D3 с нуля
+- **`@xyflow/react`** + **`@dagrejs/dagre`**
+- Типы: скопировать `hackathon-kit/stubs/types.ts`
+- Стиль: **только** `hackathon-kit/design/` → один импорт `activity-map.css`
+- Fixture через BFF или `public/sample-activity.json`
 
-## UI блоки (обязательные)
+## T0 — скопировать стили (не изобретать)
 
-1. Process tree (кастомные ноды процессов)
-2. Network panel / edges
+```text
+hackathon-kit/design/tokens.css
+hackathon-kit/design/topology.css
+hackathon-kit/design/xyflow-theme.css
+hackathon-kit/design/activity-map.css   ← import в main.tsx
+hackathon-kit/design/STYLE_GUIDE.md     ← read-only шпаргалка
+```
+
+Классы панелей уже есть: `.admin-surface`, `.liquid-metal-frame`, `.process-node`, `.incident-summary`, `.app-shell`.
+
+Превью: `activity-map-preview` — смотреть; в OnlyGo не dump-ить.
+
+## UI блоки
+
+1. Process tree (кастомные ноды `.process-node`, edges parent→child)
+2. Network panel
 3. Timeline
-4. Selection sync (клик в любом блоке подсвечивает связанные)
-5. **Incident Summary** — текст для SOC по выбранному узлу + copy в буфер
+4. Selection sync
+5. **Incident Summary** + copy
 
-## Порядок коммитов (pacing)
+## Порядок коммитов
 
-1. Vite scaffold + layout shell + токены  
-2. Fetch `/api/activity` + типы  
-3. Дерево на React Flow + dagre  
-4. Network + timeline  
-5. Sync кликов  
-6. Incident Summary + polish  
-
-## Паттерны UI
-
-- Один shared selection state (id процесса / event ts).
-- Fixture работает без живого BFF через mock или заголовок.
-- Анимации умеренно: highlight + pan-to-node, без шума.
-- a11y минимум: фокус, контраст, кнопки с label.
+1. scaffold + `activity-map.css` + shell layout  
+2. fetch/types + fixture  
+3. React Flow + dagre  
+4. network + timeline  
+5. sync  
+6. Incident Summary  
 
 ## Не делать
 
-Next.js App Router, Tailwind-only редизайн с нуля, Storybook, auth features scaffolder.
+Чистый SVG/Canvas/D3 граф с нуля; Next.js; редизайн токенов; искать CSS вне `hackathon-kit/design/`.

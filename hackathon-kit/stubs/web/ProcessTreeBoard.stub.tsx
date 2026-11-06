@@ -1,7 +1,8 @@
 /**
- * STUB — реализовать завтра.
- * Референс layout/SVG: new4 ServiceTopology.tsx + hackathon-kit/snippets/tree-layout.ts
- * Стили: design/tokens.css + design/topology.css
+ * STUB — реализовать после старта в apps/web.
+ * Движок: @xyflow/react + @dagrejs/dagre
+ * Стили: import styles/activity-map.css (tokens + topology + xyflow-theme)
+ * Типы: stubs/types.ts → apps/web/src/types.ts
  */
 import type { ProcessNode } from "../types";
 
@@ -13,13 +14,13 @@ export type ProcessTreeBoardProps = {
 
 export function ProcessTreeBoard(_props: ProcessTreeBoardProps) {
   return (
-    <div className="admin-surface liquid-metal-frame">
+    <div className="admin-surface liquid-metal-frame liquid-metal-frame--soft app-shell__tree">
       <div className="admin-surface-head">
         <h3>Process tree</h3>
-        <span>TODO</span>
+        <span>TODO · React Flow</span>
       </div>
       <p style={{ color: "var(--text-muted)" }}>
-        Заготовка: SVG дерево ppid→pid. Портировать рендер узлов из ServiceTopology.
+        Кастомные ноды `.process-node` + dagre layout ppid→pid. Не рисовать SVG-граф с нуля.
       </p>
     </div>
   );

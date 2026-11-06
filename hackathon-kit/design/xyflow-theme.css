@@ -1,0 +1,110 @@
+/* React Flow dark theme aligned with tokens.css */
+
+.react-flow {
+  --xy-background-color: transparent;
+  --xy-node-border-default: 1px solid var(--line);
+  --xy-node-background-color-default: rgba(24, 24, 27, 0.92);
+  --xy-edge-stroke-default: rgba(255, 255, 255, 0.28);
+  --xy-selection-background-color: rgba(231, 255, 114, 0.12);
+  background: transparent;
+  font-family: var(--font);
+}
+
+.react-flow__background {
+  background-color: transparent !important;
+}
+
+.react-flow__controls {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.react-flow__controls-button {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--line);
+  fill: var(--text-muted);
+}
+
+.react-flow__controls-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.react-flow__minimap {
+  background: rgba(11, 13, 16, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+/* Custom process node */
+.process-node {
+  min-width: 160px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: rgba(24, 24, 27, 0.94);
+  box-shadow: var(--shadow-inner);
+  color: var(--text);
+  font-size: 12px;
+}
+
+.process-node.selected {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 70%, transparent),
+    var(--shadow-inner);
+}
+
+.process-node[data-role="entry"] {
+  border-color: var(--role-entry);
+}
+.process-node[data-role="shell"] {
+  border-color: var(--role-shell);
+}
+.process-node[data-role="tool"] {
+  border-color: var(--role-tool);
+}
+.process-node[data-role="suspect"] {
+  border-color: var(--role-suspect);
+}
+
+.process-node__name {
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.process-node__meta {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.incident-summary {
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.incident-summary__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-copy {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: rgba(231, 255, 114, 0.12);
+  color: var(--accent);
+  font: inherit;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.btn-copy:hover {
+  background: rgba(231, 255, 114, 0.2);
+}

@@ -18,9 +18,9 @@
 
 - Kind `moshub`, RR ns `runtime-radar`, UI `:9000` admin/Password
 - `МосХаб/hotel/AGENTS.md` + `hotel/skills/0N-….md` по роли — **единственные** инструкции; `claude-skills-main` не читать
-- `МосХаб/hackathon-kit/design/` — стиль
-- `МосХаб/hackathon-kit/fixtures/sample-activity.json` — fixture атаки
-- Preview стиля: `activity-map-preview` (глаза, не копировать оптом в OnlyGo)
+- Стиль **только** `МосХаб/hackathon-kit/design/` (`activity-map.css` = один импорт)
+- Fixture: `МосХаб/hackathon-kit/fixtures/sample-activity.json`
+- Превью: `activity-map-preview` (глаза; в OnlyGo не dump)
 
 ## Стек (зафиксировано)
 

@@ -12,10 +12,10 @@
 
 ## Что здесь
 
-- `design/` — CSS tokens / topology look
+- `design/` — готовый стиль: `activity-map.css` (+ tokens, topology, xyflow-theme, STYLE_GUIDE)
 - `fixtures/sample-activity.json` — дамп сценария reverse-shell
-- `stubs/` — CONTRACT.md, types, bff stub (идеи; реализация пишется в OnlyGo после старта)
-- `snippets/tree-layout.ts` — запасной layout; **предпочтительный UI-движок: React Flow + dagre** (см. hotel)
-- `PLAN_NOCH_KODA.md` — полный план команды
+- `stubs/` — CONTRACT, types, bff/web stubs (реализация пишется в OnlyGo после старта)
+- `snippets/tree-layout.ts` — запасной; **UI: React Flow + dagre** (hotel)
+- `PLAN_NOCH_KODA.md` — план команды
 
 Правила агентов: **`../hotel/`**.
