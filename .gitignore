@@ -1,6 +1,9 @@
 # Competition clone — отдельный remote Mos.Hub, не мешать с GitHub prep
 OnlyGo/
 
+# Cursor IDE (локально; не светить в GitHub)
+.cursor/
+
 # Secrets
 .rr-install/creds.txt
 .rr-install/keys.txt
