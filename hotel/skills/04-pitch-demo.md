@@ -31,6 +31,8 @@
 - [ ] Риски (kind/eBPF) названы, fixture как страховка  
 - [ ] Нет секретов RR в слайдах/README  
 
+Язык SOC + секундный демо-скрипт: **`09-soc-demo-language.md`**.
+
 ## Не делать
 
 Полный OKR cascade, board-deck на 20 слайдов, marketing landing generator.

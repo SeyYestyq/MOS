@@ -49,9 +49,11 @@ scaffold → fixture read → tree → timeline → sync click → live RR → p
 | P1 | `skills/01-platform-rr.md` |
 | P2 | `skills/02-backend-activity-bff.md` |
 | P3 | `skills/03-frontend-activity-map.md` |
-| P4 | `skills/04-pitch-demo.md` |
-| Freeze | `skills/05-freeze-review.md` |
+| P4 | `skills/04-pitch-demo.md` + `09-soc-demo-language.md` |
+| Freeze | `skills/05-freeze-review.md` + `08-git-secrets.md` |
 | Стык | `skills/06-handoff-acid.md` |
+| Баг | `skills/07-focused-fix.md` |
+| Опц. | `skills/_borghei/` — выжимка borghei, не грузить пачкой |
 
 ## DoD продукта
 

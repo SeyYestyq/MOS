@@ -16,4 +16,6 @@
 
 ## Красные флаги в diff
 
-Hardcoded password/token, `console.log` с dump всего ответа RR, правка чужой зоны, breaking rename полей без синка.
+Hardcoded password/token, `console.log` с dump всего ответа RR, правка чужой зоны, breaking rename полей без синка, `Co-authored-by: Cursor`.
+
+Секреты/коммиты: `08-git-secrets.md`. Точечно: `_borghei/code-reviewer.md`.

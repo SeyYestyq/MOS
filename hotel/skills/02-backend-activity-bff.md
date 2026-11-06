@@ -31,6 +31,13 @@
 - Без БД, без auth-сервиса, без GraphQL.
 - CORS только для Vite origin.
 
+## Контракт (мини-чеклист API)
+
+- Один ресурс activity, поля стабильны (Pydantic).
+- Ошибки RR не валят демо (fallback fixture).
+- OpenAPI отдаётся; breaking rename — только на sync.
+- Точечно: `_borghei/api-design-reviewer.md`, pytest идеи `_borghei/api-test-suite-builder.md`
+
 ## Не делать
 
-Миграции БД, load-test скрипты, Express/Fastify scaffolder, микросервисный сплит.
+Миграции БД, load-test, Express scaffolder, микросервисный сплит.
