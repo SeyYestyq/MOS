@@ -1,0 +1,5 @@
+hackathon-kit/ и hotel/ и activity-map-preview/ — ЛОКАЛЬНАЯ подготовка.
+Не git add / не push в OnlyGo / Mos.Hub до старта и не как «первый идеальный AGENTS.md».
+
+После старта в OnlyGo коммитить: код apps/, README, презентацию, контракт в коде (Pydantic).
+AGENTS.md и skills/ держать в МосХаб/hotel/ (агенты читают с диска).

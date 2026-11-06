@@ -1,0 +1,17 @@
+# Competition clone — отдельный remote Mos.Hub, не мешать с GitHub prep
+OnlyGo/
+
+# Secrets
+.rr-install/creds.txt
+.rr-install/keys.txt
+
+# Node
+**/node_modules/
+**/dist/
+**/.vite/
+
+# OS / IDE
+.DS_Store
+*.log
+.env
+.env.*

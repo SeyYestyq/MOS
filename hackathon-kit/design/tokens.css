@@ -1,0 +1,47 @@
+/* Extracted from new4 frontend (index.css + liquid-metal) — style source of truth */
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --bg: #050607;
+  --bg-elevated: #0b0d10;
+  --panel: rgba(18, 20, 23, 0.72);
+  --panel-strong: rgba(24, 27, 31, 0.86);
+  --text: #f4f2ec;
+  --text-muted: rgba(244, 242, 236, 0.64);
+  --text-soft: rgba(244, 242, 236, 0.42);
+  --line: rgba(255, 255, 255, 0.11);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --accent: #e7ff72;
+  --accent-2: #37d5ff;
+  --accent-3: #ffce63;
+  --accent-rose: #ff5f8d;
+  --danger: #ff7b7b;
+  --radius-sm: 14px;
+  --radius-md: 22px;
+  --radius-lg: 34px;
+  --radius-pill: 999px;
+  --shadow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.035);
+  --body-bg: radial-gradient(
+      circle at 18% 14%,
+      rgba(231, 255, 114, 0.14),
+      transparent 28%
+    ),
+    radial-gradient(circle at 86% 18%, rgba(55, 213, 255, 0.12), transparent 26%),
+    radial-gradient(circle at 72% 82%, rgba(255, 95, 141, 0.1), transparent 30%),
+    linear-gradient(180deg, #101215 0%, #050607 44%, #020303 100%);
+  --font: Manrope, system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --liquid-theme-card: 14 14 21;
+  --liquid-theme-border: 39 39 42;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--body-bg);
+  background-attachment: fixed;
+  color-scheme: dark;
+}

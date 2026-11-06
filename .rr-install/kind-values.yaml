@@ -1,0 +1,92 @@
+# Kind/local overrides for Mos.Hub hackathon
+auth-center:
+  replicas: 1
+  image:
+    tag: v0.2.0
+policy-enforcer:
+  replicas: 1
+  image:
+    tag: v0.2.0
+history-api:
+  replicas: 1
+  image:
+    tag: v0.2.0
+cluster-manager:
+  replicas: 1
+  image:
+    tag: v0.2.0
+notifier:
+  replicas: 1
+  image:
+    tag: v0.2.0
+reverse-proxy:
+  replicas: 1
+  image:
+    tag: v0.2.0
+  service:
+    type: NodePort
+    nodePorts:
+      http: 32000
+cs-manager:
+  replicas: 1
+  image:
+    tag: v0.2.0
+runtime-monitor:
+  image:
+    tag: v0.2.0
+  tetragon:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+event-processor:
+  replicas: 1
+  image:
+    tag: v0.2.0
+public-api:
+  replicas: 1
+  image:
+    tag: v0.2.0
+clickhouse:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 2Gi
+postgresql:
+  primary:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+rabbitmq:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+redis:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi

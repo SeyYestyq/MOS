@@ -1,0 +1,18 @@
+---
+description: Never leave Co-authored-by Cursor on commits, pushes, or PRs
+alwaysApply: true
+---
+
+# No Cursor co-author trailers
+
+Before every **commit**, **push**, or **pull request**:
+
+1. Ensure the commit message body has **no** lines like:
+   - `Co-authored-by: Cursor <…>`
+   - `Co-authored-by: cursoragent@cursor.com`
+   - any other Cursor / cursoragent co-author trailer
+2. After `git commit`, run `git log -1 --format='%B'` and verify.
+3. If a trailer appeared, amend **only that local unpushed commit** (or rewrite the range before push) to strip it, then re-check.
+4. Never open/merge a PR whose commits still contain those trailers.
+
+Do not add Cursor as a co-author in messages, trailers, or PR descriptions.
