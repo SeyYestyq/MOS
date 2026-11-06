@@ -7,7 +7,7 @@
 - `apps/web`: Vite + React + TypeScript + **@xyflow/react** + layout (dagre / `@dagrejs/dagre`)
 - `apps/bff`: FastAPI + Pydantic модели = источник правды контракта (`/openapi.json`)
 - Данные: Runtime Radar HTTP API **или** fixture JSON
-- Стиль: токены из `../hackathon-kit/design/` (копировать в web после старта по кускам)
+- Стиль: `../hackathon-kit/design/activity-map.css` (один импорт; не искать CSS вне kit)
 
 ## Path ownership
 
