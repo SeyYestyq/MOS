@@ -44,6 +44,7 @@ func activityHandler(w http.ResponseWriter, r *http.Request) {
 	if payload.Namespace == "" {
 		payload.Namespace = ns
 	}
+	ensureSlices(payload)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("X-Data-Source", src)

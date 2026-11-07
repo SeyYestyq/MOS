@@ -19,6 +19,7 @@ func loadFixture(path string) (*ActivityPayload, error) {
 		return nil, err
 	}
 	SanitizePayload(&p)
+	ensureSlices(&p)
 	return &p, nil
 }
 

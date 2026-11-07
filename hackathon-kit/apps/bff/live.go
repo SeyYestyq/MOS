@@ -13,8 +13,9 @@ import (
 	"time"
 )
 
-// fetchLiveActivity pulls full events via public-api REST slice (has args/sock_arg).
-// ClickHouse path intentionally unused here — no args for network map.
+// fetchLiveActivity — Damir live wiring.
+// History from "now" goes BACKWARD via /slice/right (registered_at < cursor).
+// /slice/left is futureward and wrong for completed gen-activity dumps.
 func fetchLiveActivity(namespace, pod string) (*ActivityPayload, error) {
 	base := strings.TrimRight(os.Getenv("RR_BASE_URL"), "/")
 	if base == "" {
@@ -37,18 +38,21 @@ func fetchLiveActivity(namespace, pod string) (*ActivityPayload, error) {
 			pages = n
 		}
 	}
+	direction := strings.ToLower(envOr("RR_SLICE_DIR", "right")) // right = history
 
 	client := &http.Client{Timeout: 30 * time.Second}
 	if os.Getenv("RR_INSECURE_TLS") == "true" || os.Getenv("RR_INSECURE_TLS") == "1" {
 		client.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, //nolint:gosec // hackathon self-signed
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, //nolint:gosec
 		}
 	}
 
 	var all []RawRREvent
+	var skipped int
 	cursor := time.Now().UTC().Format(time.RFC3339Nano)
+
 	for i := 0; i < pages; i++ {
-		u, err := url.Parse(base + "/api/v1/public-api/runtime-event/slice/left")
+		u, err := url.Parse(fmt.Sprintf("%s/api/v1/public-api/runtime-event/slice/%s", base, direction))
 		if err != nil {
 			return nil, err
 		}
@@ -80,6 +84,7 @@ func fetchLiveActivity(namespace, pod string) (*ActivityPayload, error) {
 		var page struct {
 			RuntimeEvents []json.RawMessage `json:"runtime_events"`
 			LeftCursor    string            `json:"left_cursor"`
+			RightCursor   string            `json:"right_cursor"`
 		}
 		if err := json.Unmarshal(body, &page); err != nil {
 			return nil, fmt.Errorf("RR slice decode: %w", err)
@@ -90,70 +95,25 @@ func fetchLiveActivity(namespace, pod string) (*ActivityPayload, error) {
 		for _, raw := range page.RuntimeEvents {
 			ev, err := unwrapRuntimeEvent(raw)
 			if err != nil {
+				skipped++
 				continue
 			}
 			all = append(all, ev)
 		}
-		if page.LeftCursor == "" || page.LeftCursor == cursor {
+		next := page.RightCursor
+		if direction == "left" {
+			next = page.LeftCursor
+		}
+		if next == "" || next == cursor {
 			break
 		}
-		cursor = page.LeftCursor
+		cursor = next
 	}
 
+	if skipped > 0 {
+		fmt.Printf("live: skipped %d undecodable events (kept %d)\n", skipped, len(all))
+	}
 	return NormalizeEvents(all, namespace, pod, nil)
-}
-
-func unwrapRuntimeEvent(raw json.RawMessage) (RawRREvent, error) {
-	// RR wraps Tetragon GetEventsResponse; tolerate flat or nested shapes.
-	var flat RawRREvent
-	if err := json.Unmarshal(raw, &flat); err == nil && flat.Process != nil {
-		return flat, nil
-	}
-	var wrap struct {
-		Event json.RawMessage `json:"event"`
-		Time  string          `json:"registered_at"`
-		Threats []RawThreat   `json:"threats"`
-	}
-	if err := json.Unmarshal(raw, &wrap); err != nil {
-		return RawRREvent{}, err
-	}
-	var inner struct {
-		ProcessExec   *struct {
-			Process *RawProcess `json:"process"`
-			Parent  *RawProcess `json:"parent"`
-		} `json:"process_exec"`
-		ProcessExit *struct {
-			Process *RawProcess `json:"process"`
-			Parent  *RawProcess `json:"parent"`
-		} `json:"process_exit"`
-		ProcessKprobe *struct {
-			Process      *RawProcess `json:"process"`
-			Parent       *RawProcess `json:"parent"`
-			FunctionName string      `json:"function_name"`
-			Args         []RawArg    `json:"args"`
-		} `json:"process_kprobe"`
-	}
-	_ = json.Unmarshal(wrap.Event, &inner)
-	ev := RawRREvent{Time: wrap.Time, Threats: wrap.Threats}
-	switch {
-	case inner.ProcessExec != nil:
-		ev.Type = "PROCESS_EXEC"
-		ev.Process = inner.ProcessExec.Process
-		ev.Parent = inner.ProcessExec.Parent
-	case inner.ProcessExit != nil:
-		ev.Type = "PROCESS_EXIT"
-		ev.Process = inner.ProcessExit.Process
-		ev.Parent = inner.ProcessExit.Parent
-	case inner.ProcessKprobe != nil:
-		ev.Type = "PROCESS_KPROBE"
-		ev.Process = inner.ProcessKprobe.Process
-		ev.Parent = inner.ProcessKprobe.Parent
-		ev.FunctionName = inner.ProcessKprobe.FunctionName
-		ev.Args = inner.ProcessKprobe.Args
-	default:
-		return RawRREvent{}, fmt.Errorf("unknown event shape")
-	}
-	return ev, nil
 }
 
 func truncate(s string, n int) string {
