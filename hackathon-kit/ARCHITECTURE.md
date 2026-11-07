@@ -11,7 +11,7 @@
 
 ## 1. Вектор в одном абзаце
 
-Плоский поток событий Tetragon (через Runtime Radar) → **Go BFF нормализует** в три согласованных среза данных (процессы / сеть / время) → **React Single Pane of Glass** показывает их синхронно. Живой RR желателен; **fixture-first** обязателен (демо не зависит от кластера).
+Плоский поток Tetragon (REST **или** сохранённый dump) проходит **один адаптер** и становится одним снимком. Из него UI берёт три проекции: процессы, сетевые наблюдения, события и угрозы. Живой RR желателен; **fixture-first** обязателен. Канон полей: `DATA_MODEL.md`.
 
 ---
 
@@ -27,8 +27,9 @@
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  apps/bff  — Go  :8000          Backend                     │
-│  normalize → DAG exec_id · sock_arg → net · XSS sanitize    │
-│  GET /api/activity   X-Data-Source: live | fixture          │
+│  ОДИН адаптер: API и dump → одни события                    │
+│  снимок: процессы + net observations + threats              │
+│  GET /api/activity   X-Data-Source: live | raw | fixture    │
 └────────────────────────────┬────────────────────────────────┘
                              │ один JSON-контракт (types.ts)
                              ▼
@@ -54,17 +55,18 @@ Platform: kind/Helm RR · Sources/All · gen-activity · dump → fixtures/raw/
 
 ## 3. Модель данных (ядро продукта)
 
-Не «логи в таблице», а **три проекции одного инцидента**:
+Канон: **`DATA_MODEL.md`** (модель напарника, принята). Кратко:
 
-| Проекция | Источник в событии | Правило |
-|----------|--------------------|---------|
-| **Дерево процессов** | `process.exec_id`, `parent.exec_id` | ребро только `parent_exec_id → exec_id` (**не** pid/ppid) |
-| **Сеть** | `PROCESS_KPROBE` → `args[].sock_arg` | listen / connect / close, привязка к `exec_id` |
-| **Таймлайн** | EXEC+EXIT → интервал; kprobe → точка | те же `execId`, общий brush |
+| Проекция | Правило |
+|----------|---------|
+| **Процессы** | ребро только если родитель **в снимке**; иначе `parentStatus: outside_window`, не клеить к init |
+| **Времена** | `startedAt`, подтверждённый `exitedAt`, `firstObservedAt`, `lastObservedAt` (last ≠ exit) |
+| **Контейнер** | cluster + namespace + pod name + **pod UID** + container id |
+| **Сеть** | наблюдения `connect` / `listen` / `close` из `sock_arg`, не список «живых сокетов» |
+| **Угрозы** | отдельные сущности: detector, severity, reason, tactics, techniques, ссылка на событие |
+| **Контракт** | один JSON; Go и TS сверяются тестом, не правятся врозь |
 
-Демо-якорь угрозы: `nc -l 8888` → `inet_csk_listen_start` → MITRE **TA0011 / T1571** (CRITICAL).
-
-Контракт: `stubs/CONTRACT.md` + `stubs/types.ts` → ответ `GET /api/activity`.
+Демо-якорь: `nc -l 8888` → listen + threat **TA0011 / T1571**.
 
 ---
 
@@ -85,9 +87,10 @@ Platform: kind/Helm RR · Sources/All · gen-activity · dump → fixtures/raw/
 ## 5. Режимы данных (деградация)
 
 ```
-live REST slice (с args)  →  dump fixtures/raw  →  sample-activity.json
-         ▲                        ▲                       ▲
-      Platform                 Platform                 Backend stub
+live REST slice ──┐
+                   ├─ один адаптер ─► один JSON (X-Data-Source честный)
+сохранённый dump ──┘
+fixture — тот же shape, если RR нет
 ```
 
 Заголовок `X-Data-Source` всегда честный. UI обязан работать на fixture.

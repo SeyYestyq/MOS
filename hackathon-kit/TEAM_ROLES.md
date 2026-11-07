@@ -23,9 +23,9 @@ Docs / `BASE.md` / питч — все в конце. Когда Ангелин�
 |----|--------|-----|
 | A1 | Vite React TS + `activity-map.css` + `types.ts` | Must |
 | A2 | Layout: Highlights + 3 панели + drawer | Must |
-| A3 | Process Tree: `@xyflow/react` + dagre, рёбра `parentExecId → execId` | Must |
-| A4 | Network Map по `network[].execId` | Must |
-| A5 | Timeline `vis-timeline` (groups) | Must |
+| A3 | Process Tree: dagre; ребро только если родитель в снимке; `outside_window` явно | Must |
+| A4 | Network: наблюдения `connect/listen/close`, не «живые сокеты» | Must |
+| A5 | Timeline: жизнь процесса по started/exited; 3-я дорожка = `threats[]` | Must |
 | A6 | Zustand: `selectedExecId` + time brush на все панели | Must |
 | A7 | Incident Summary + copy; MITRE badges | Should |
 | A8 | Import JSON dump; Attack Path highlight | Should |
@@ -66,8 +66,8 @@ Docs / `BASE.md` / питч — все в конце. Когда Ангелин�
 | ID | Задача | Pri |
 |----|--------|-----|
 | C1 | Scaffold `apps/bff`: `/healthz`, `/api/activity`, CORS, `X-Data-Source` | Must |
-| C2 | Контракт = `types.ts` / `CONTRACT.md` / Go structs (не ломать без чата с Ангелиной) | Must |
-| C3 | Нормализатор: `exec_id` DAG; EXEC+EXIT→range; sock_arg→network; filter `start_time`; Severity/Reason/Tactics | Must |
+| C2 | **Один контракт** по `DATA_MODEL.md`: Go structs = JSON = TS; тест фикстуры ловит расхождение | Must |
+| C3 | **Один адаптер** API и dump → одинаковые события; честный parent; времена; threats[]; net.kind | Must |
 | C4 | Fixture `sample-activity.json` + разбор `fixtures/raw/` от Дамира | Must |
 | C5 | XSS sanitize arguments; **нет** `dangerously…` на бэке в HTML | Must |
 | C6 | `go test ./...`: DAG без pid-only рёбер; fixture roundtrip; sanitize | Must |

@@ -1,4 +1,7 @@
-# API contract (зафиксировать в час 0)
+# API contract
+
+Канон полей — `hackathon-kit/DATA_MODEL.md` (и копия в OnlyGo `docs/DATA_MODEL.md`).
+Ниже — текущий черновик ответа `GET /api/activity`. После посадки модели поля времён, `parentStatus`, `threats[]` и `network.kind` обязаны совпасть в Go и TS.
 
 ## `GET /api/activity?pod=<name>&namespace=<ns>`
 
@@ -49,8 +52,8 @@
 ### Tree rule (Математическая модель DAG)
 
 1. **Основное правило:** Ребро `parent → child` строится **строго по `child.parentExecId === parent.execId`**.
-2. **Корень (Root):** Узлы, у которых `parentExecId === null` или родитель отсутствует в текущей выборке (init-процесс контейнера или корень сессии `kubectl exec`).
-3. **Защита от PID reuse:** Запрещено строить дерево только по `ppid === pid`, так как в контейнерах и при агрегации нескольких подов PID не уникальны. `ppid` допускается только как запасной fallback для моков.
+2. **Корень:** родитель вне снимка → `parentStatus: outside_window`. Не присоединять к init.
+3. **PID:** не строит ребро.
 
 ### Fallback
 

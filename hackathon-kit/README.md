@@ -22,6 +22,7 @@
 | `stubs/` | web stubs, CONTRACT, types, BASE, CHANGELOG, docs | да → `apps/web`, корень |
 | `PLAN_NOCH_KODA.md` | план победы | ориентир; в OnlyGo — README по делу |
 | `ARCHITECTURE.md` | вектор продукта | читать всей команде |
+| `DATA_MODEL.md` | целевой контракт снимка (адаптер, времена, угрозы) | канон для BFF и UI |
 | `TEAM_ROLES.md` | Ангелина / Дамир / Денис | задачи по людям |
 | `refs/` | PDF / заметки RR | локально / по желанию |
 

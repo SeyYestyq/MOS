@@ -7,6 +7,7 @@
 **Репозиторий сдачи:** `OnlyGo` на платформе «Мос.Хаб» (`git@hub.mos.ru:event_DIT/2026/onlygo.git`)  
 **Техническая и нормативная база (для команды — наши файлы, не исходные docx):**
 - Вектор продукта: `hackathon-kit/ARCHITECTURE.md`
+- **Модель данных (канон):** `hackathon-kit/DATA_MODEL.md`
 - Ветки людей: `hackathon-kit/TEAM_ROLES.md`
 - Выжимка RR + аудит: `hackathon-kit/refs/RR_MATERIALS_NOTES.md`
 - PDF задачи/критерии/требования — в `OnlyGo/` на Мос.Хабе (и копии в `hackathon-kit/refs/` при наличии)
@@ -118,17 +119,21 @@
   └────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 3.2. Математическая модель графа (DAG) и сетевой корреляции
+### 3.2. Целевая модель (принята, см. `DATA_MODEL.md`)
+
+Один адаптер на API и dump. Идентичность контейнера: cluster, namespace, pod UID, container ID. Времена раздельно (`startedAt` / подтверждённый `exitedAt` / `firstObservedAt` / `lastObservedAt`). Родитель вне окна — явный `outside_window`, без склейки к init. Сеть — наблюдения `connect|listen|close`, не «активные сокеты». Угрозы — отдельные сущности со ссылкой на событие. Контракт один и проверяется тестом Go↔JSON↔UI.
+
+### 3.3. Математическая модель графа (DAG) и сетевой корреляции
 1. **Узлы графа процессов ($V_p$):**  
    Каждый узел $v \in V_p$ идентифицируется строкой `process.exec_id` (уникальный хеш Tetragon в base64).
    - Атрибуты: `binary`, `arguments`, `cwd`, `uid`, `pid`.
    - Флаг `in_init_tree`: булево значение, позволяющее отделить штатный контейнерный демон от интерактивной сессии `kubectl exec`.
-   - Временные границы: `startTime`, `lastSeen`.
-   - Вектор угроз: `mitre: string[]` (`["TA0011", "T1571"]`).
+   - Времена: `startedAt`, `exitedAt` (только EXIT), `firstObservedAt`, `lastObservedAt`.
+   - Угрозы живут отдельно (`threats[]`), на узле можно показать ссылку.
 2. **Направленные рёбра графа процессов ($E_p$):**  
-   Ребро $(u, v) \in E_p$ создается исключительно по условию:
-   $$\text{target.parent\_exec\_id} == \text{source.exec\_id}$$
-   Это гарантирует математическую ацикличность графа ($G = (V_p, E_p)$ — строгий DAG) и защищает аналитика от коллизий Linux PID.
+   Ребро $(u, v) \in E_p$ только если оба узла в снимке и
+   $$\text{target.parentExecId} == \text{source.execId}$$
+   Родитель вне окна → `parentStatus=outside_window`, ребра к init нет. PID не строит ребро.
 3. **Сетевые связи и сокеты ($E_{net}$):**  
    Для `tcp_connect` / `tcp_close` / listen TracingPolicy тип аргумента — **`sock`** → в JSON это **`args[].sock_arg`** (`saddr`, `daddr`, `sport`, `dport`, `family`).  
    **Не** путать с `sockaddr_arg.addr` (тип `sockaddr` — другой shape; на `tcp_connect` с `type: sock` его нет).

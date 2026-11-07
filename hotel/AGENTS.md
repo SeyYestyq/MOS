@@ -16,7 +16,7 @@
 - `apps/web`: Vite + React + TS + **Zustand** + **@xyflow/react** + dagre + **vis-timeline**  
 - `apps/bff`: **Go** (`net/http`); контракт JSON `/api/activity`  
 - Граф процессов: рёбра по **`exec_id` → `parent.exec_id`**, не только pid/ppid  
-- Данные: RR public-api / dump **или** fixture  
+- **Данные:** `hackathon-kit/DATA_MODEL.md` (канон снимка)  
 - Стиль: `../hackathon-kit/design/activity-map.css`
 
 ## Path ownership
