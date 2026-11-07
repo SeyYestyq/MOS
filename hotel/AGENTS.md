@@ -1,59 +1,47 @@
 # AGENTS.md (локально / hotel — НЕ коммитить в OnlyGo)
 
-Хакатон: Ночь кода · задача PT · Activity Map на Runtime Radar.  
-Команда: **3 человека** (A / B / C).
+Хакатон: Ночь кода · PT · Activity Map.  
+Команда: **3 инженера** — Frontend / Backend / Platform.  
+Docs, BASE, питч — общая лёгкая нагрузка в конце, не отдельная роль.
 
-## Стек (фиксировано)
+## Стек
 
-- `apps/web`: Vite + React + TypeScript + **@xyflow/react** + layout (dagre / `@dagrejs/dagre`)
-- `apps/bff`: FastAPI + Pydantic модели = источник правды контракта (`/openapi.json`)
-- Данные: Runtime Radar HTTP API **или** fixture JSON
-- Стиль: `../hackathon-kit/design/activity-map.css` (один импорт; не искать CSS вне kit)
+- `apps/web`: Vite + React + TS + **@xyflow/react** + dagre  
+- `apps/bff`: FastAPI + Pydantic → `/openapi.json`  
+- Данные: RR HTTP **или** fixture  
+- Стиль: `../hackathon-kit/design/activity-map.css`
 
 ## Path ownership
 
 | Роль | Можно писать | Нельзя |
 |------|--------------|--------|
-| **A** Frontend+Viz | `apps/web/**` | `apps/bff/**`, корень, docs сдачи |
-| **B** Data/BFF | `apps/bff/**`; корень как integrator | `apps/web/**` без joint |
-| **C** Platform+Docs | `scripts/**`, `deploy/**`, `fixtures/raw/**`, `docs/**`, `CHANGELOG.md`, `BASE.md`, `README.md`, pptx | `apps/**` без просьбы |
+| **Frontend** | `apps/web/**` | `apps/bff/**`, scripts RR |
+| **Backend** | `apps/bff/**`; корень как integrator | `apps/web/**` без joint |
+| **Platform** | `scripts/**`, `deploy/**`, `fixtures/raw/**` | `apps/**` без просьбы |
 
-**Корень репозитория** (выше `apps/`, кроме явно отданных C файлов docs/CHANGELOG/BASE/README) — **B** (integrator).  
-C пишет `CHANGELOG.md`, `BASE.md`, `README.md`, `docs/**` без переписывания package/docker без B.
+`docs/**`, `CHANGELOG.md`, `BASE.md`, `README.md` — пишут **все** по своим кускам; финальный BASE — joint.
 
-В каждом промпте агенту первой строкой:  
-`Разрешённые пути: … . Всё остальное read-only. Не меняй .gitignore, docker-compose, Makefile без явной просьбы.`
+Промпт агенту:  
+`Разрешённые пути: … . Остальное read-only. Корень (compose/Makefile) — только Backend-integrator.`
 
-## Контракт
+## Контракт / handoff
 
-Источник правды: Pydantic в BFF → `/openapi.json`.  
-Breaking change — только на sync команды (ведёт B).
+Pydantic → OpenAPI. Breaking change — sync.  
+Стык: curl + AC в чате.
 
-## Handoff
+## Pacing
 
-Предпочтительно: OpenAPI / curl + AC в чате.  
-`hotel/handoffs/` — опционально.
-
-## Pacing коммитов в OnlyGo
-
-Не mega-commit через 15 минут. Дробить:  
-scaffold → fixture → tree → timeline/network → sync → summary → live → docs/BASE.
+scaffold → fixture → tree → panels → sync → summary → live → docs/BASE.
 
 ## Skills
 
-Только `hotel/skills/` (карта — `hotel/SKILLS.md`).
+| Роль | Файлы |
+|------|--------|
+| Frontend | `03`, `09` |
+| Backend | `02` |
+| Platform | `01`, `07` |
+| Все | `08`, `05` (freeze), `10` + `04` (docs/питч в конце) |
 
-| Роль | Файл |
-|------|------|
-| A | `skills/03-frontend-activity-map.md` (+ `09` для Incident Summary) |
-| B | `skills/02-backend-activity-bff.md` |
-| C | `01-platform-rr.md`, `04-pitch-demo.md`, `10-docs-changelog.md`, `09-soc-demo-language.md` |
-| Все | `08-git-secrets.md` |
-| Freeze | `05-freeze-review.md` |
-| Стык | `06-handoff-acid.md` |
-| Баг | `07-focused-fix.md` |
-| Опц. | `skills/_borghei/` — не грузить пачкой |
+## DoD
 
-## DoD продукта
-
-Одно окно: process tree + network + timeline + sync; Incident Summary; fixture fallback; README; **CHANGELOG**; **BASE.md** (ИИ); демо < 60s; Public.
+Tree + network + timeline + sync; Incident Summary; fixture; README; CHANGELOG; BASE.md; демо < 60s; Public.

@@ -1,10 +1,10 @@
-# Backend Activity BFF (роль B)
+# Backend Activity BFF
 
 Всё нужное здесь. Не открывать senior-backend целиком.
 
 ## Зона
 
-`apps/bff/**` + роль integrator корня. Web — read-only.
+`apps/bff/**` + integrator корня. Web — read-only.
 
 ## Стек
 

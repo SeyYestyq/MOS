@@ -8,7 +8,8 @@
 - [ ] Live RR — если работает; иначе честно fixture в UI  
 - [ ] Нет секретов/токенов в OnlyGo  
 - [ ] Нет `AGENTS.md`, `skills/`, `hotel/` в истории коммитов OnlyGo  
-- [ ] Path ownership A/B/C не сломан  
+- [ ] Path ownership Frontend/Backend/Platform не сломан  
+
 - [ ] OpenAPI и UI согласованы  
 - [ ] Incident Summary копируется  
 - [ ] README + **CHANGELOG.md** + **BASE.md** (блок ИИ заполнен)  

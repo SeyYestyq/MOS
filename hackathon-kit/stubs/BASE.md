@@ -1,6 +1,6 @@
 # Базовый файл — Activity Map (Positive Technologies / Runtime Radar)
 
-> Обязательный текстовый файл сдачи (Мос.Хаб). Заполняет роль **C** перед freeze; факты от A/B.
+> Обязательный текстовый файл сдачи (Мос.Хаб). Заполняют **все трое** перед freeze (Frontend / Backend / Platform).
 
 ## 1. О продукте
 

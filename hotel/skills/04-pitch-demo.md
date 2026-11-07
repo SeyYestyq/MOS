@@ -1,10 +1,10 @@
-# Pitch / Demo (роль C)
+# Pitch / Demo — в конце ночи (все)
 
-Всё нужное здесь. Не открывать roadmap-communicator целиком.
+Не открывать roadmap-communicator целиком. Сначала код своей роли.
 
 ## Зона
 
-`docs/pitch/**`, `README.md`, слайды, совместно с `10-docs-changelog.md` (`BASE.md`, `DEMO.md`).  
+`docs/pitch/**`, слайды, `docs/DEMO.md` — joint с `10-docs-changelog.md`.  
 Не править `apps/**` без joint.
 
 ## Структура питча (5–7 мин)

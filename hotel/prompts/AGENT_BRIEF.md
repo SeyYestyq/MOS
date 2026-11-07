@@ -1,41 +1,29 @@
-# AGENT BRIEF — Ночь кода / Интерактивная карта активности контейнера
+# AGENT BRIEF — Activity Map (PT / Runtime Radar)
 
-Вставлять агенту **после старта**. `МосХаб/hotel/` и правила ИИ **не коммитить** в OnlyGo.
+После старта. `hotel/` в OnlyGo **не** коммитить.
 
 ## Задача
 
-Веб-интерфейс по Runtime Radar в **одном окне**: хронология, дерево процессов, сеть — аналитик ИБ быстро восстанавливает картину.
+Одно окно: хронология + дерево процессов + сеть — аналитик ИБ восстанавливает картину быстро.
 
-## Команда (3 роли)
+## Роли (3 инженера)
 
 | Роль | Зона | Skill |
 |------|------|-------|
-| **A** Frontend+Viz | `apps/web/**` | `03` (+ `09`) |
-| **B** Data/BFF | `apps/bff/**` (+ integrator) | `02` |
-| **C** Platform+Docs | scripts, fixtures/raw, docs, CHANGELOG, **BASE.md**, pitch | `01` + `04` + `10` |
+| **Frontend** | `apps/web/**` | `03` (+ `09`) |
+| **Backend** | `apps/bff/**` | `02` |
+| **Platform** | `scripts/**`, `fixtures/raw/**` | `01` |
 
-## Критерии жюри
-
-30% решение · 25% качество · 20% инновация · 15% презентация · 10% потенциал
-
-## Локальный контекст
-
-- RR: kind `moshub`, `:9000` (см. `.rr-install/ACCESS.md`)
-- `hotel/AGENTS.md` + skill роли — единственные инструкции
-- Стиль: `hackathon-kit/design/activity-map.css`
-- Fixture: `hackathon-kit/fixtures/sample-activity.json`
-- PDF: `hackathon-kit/refs/Задача_Positive_Technologies_описание_задачи.pdf`
+Docs / `BASE.md` / питч — **общая** работа в конце, не вместо кода.
 
 ## Стек
 
-- Web: Vite + React + TS + **@xyflow/react + dagre**
-- BFF: FastAPI + Pydantic → OpenAPI; fixture-first `X-Data-Source`
-- Live RR: HTTP, не парсинг логов
+Vite/React/xyflow+dagre · FastAPI/Pydantic · fixture-first · live RR по HTTP.
 
-## Сдача (PDF)
+## Сдача
 
-Код + документация + презентация + **BASE.md** (базовый файл с блоком ИИ) + демо.
+Код + docs + **BASE.md** (ИИ) + презентация + демо < 60s.
 
-## Pacing / DoD
+## DoD
 
-Дробные коммиты. DoD: tree + network + timeline + sync + Incident Summary; fixture; README; CHANGELOG; BASE.md; демо < 60s; без hotel в git.
+Tree + network + timeline + sync + Incident Summary; fixture; README; CHANGELOG; BASE; Public; без hotel в git.

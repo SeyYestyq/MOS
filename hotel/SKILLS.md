@@ -1,22 +1,22 @@
-# Skills в hotel — единственный источник для агентов
+# Skills — hotel
 
-Команда **A / B / C**. Агенту: **`hotel/AGENTS.md` + skill(и) своей роли**.  
-Не открывать `claude-skills-main` и не читать пачкой `_borghei/`.
+Команда: **Frontend / Backend / Platform**.  
+Агенту: `AGENTS.md` + skill своей роли.
 
-| Файл | Роль |
-|------|------|
-| `01-platform-rr.md` | C — kind / RR / dumps |
-| `02-backend-activity-bff.md` | B — BFF / данные |
-| `03-frontend-activity-map.md` | A — UI / визуализация |
-| `04-pitch-demo.md` | C — питч |
-| `05-freeze-review.md` | перед freeze |
-| `06-handoff-acid.md` | приёмка стыков |
-| `07-focused-fix.md` | баг за час до демо |
-| `08-git-secrets.md` | коммиты + секреты |
-| `09-soc-demo-language.md` | язык SOC / демо-скрипт |
-| `10-docs-changelog.md` | C — CHANGELOG, docs, **BASE.md** |
+| Файл | Кто |
+|------|-----|
+| `01-platform-rr.md` | Platform |
+| `02-backend-activity-bff.md` | Backend |
+| `03-frontend-activity-map.md` | Frontend |
+| `04-pitch-demo.md` | все (в конце) |
+| `05-freeze-review.md` | все перед freeze |
+| `06-handoff-acid.md` | стыки |
+| `07-focused-fix.md` | баг / RR triage |
+| `08-git-secrets.md` | все |
+| `09-soc-demo-language.md` | Frontend + питч |
+| `10-docs-changelog.md` | все (CHANGELOG/BASE) |
 
-Выжимка borghei: `skills/_borghei/` — только точечно.
+`_borghei/` — только точечно.
 
 Промпт:  
-`Сначала AGENTS.md и skills своей роли (A→03, B→02, C→01+04+10). Чужие репо не читай.`
+`Frontend→03, Backend→02, Platform→01. Docs/питч — skill 10 и 04 в конце ночи, не вместо кода.`

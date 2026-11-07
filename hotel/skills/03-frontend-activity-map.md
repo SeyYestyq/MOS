@@ -1,4 +1,4 @@
-# Frontend Activity Map (роль A)
+# Frontend Activity Map
 
 Всё нужное здесь. Не открывать чужие репозитории за стилем.
 
