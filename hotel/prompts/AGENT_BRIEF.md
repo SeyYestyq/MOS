@@ -18,7 +18,7 @@ Docs / `BASE.md` / питч — **общая** работа в конце, не 
 
 ## Стек
 
-Vite/React/xyflow+dagre · FastAPI/Pydantic · fixture-first · live RR по HTTP.
+Vite/React/xyflow+dagre+vis-timeline+Zustand · **Go BFF** · fixture-first · live RR по HTTP.
 
 ## Сдача
 

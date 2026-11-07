@@ -19,14 +19,14 @@
 ## 2. Стек
 
 - Web: Vite + React + TypeScript + `@xyflow/react` + dagre  
-- BFF: FastAPI + Pydantic (OpenAPI)  
+- BFF: **Go** (`net/http`)  
 - Данные: fixture JSON и/или live Runtime Radar (HTTP)
 
 ## 3. Как запустить
 
 ```bash
 # BFF
-cd apps/bff && pip install -r requirements.txt && uvicorn app:app --reload --port 8000
+cd apps/bff && go run .
 
 # Web
 cd apps/web && npm i && npm run dev

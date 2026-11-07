@@ -7,7 +7,7 @@ Docs, BASE, питч — общая лёгкая нагрузка в конце,
 ## Стек
 
 - `apps/web`: Vite + React + TS + **Zustand** + **@xyflow/react** + dagre + **vis-timeline**  
-- `apps/bff`: **Go или FastAPI** (решение Backend на T0); контракт JSON `/api/activity`  
+- `apps/bff`: **Go** (`net/http`); контракт JSON `/api/activity`  
 - Граф процессов: рёбра по **`exec_id` → `parent.exec_id`**, не только pid/ppid  
 - Данные: RR public-api / dump **или** fixture  
 - Стиль: `../hackathon-kit/design/activity-map.css`  
@@ -28,7 +28,7 @@ Docs, BASE, питч — общая лёгкая нагрузка в конце,
 
 ## Контракт / handoff
 
-Pydantic → OpenAPI. Breaking change — sync.  
+Контракт = Go structs / JSON schema + `stubs/types.ts`. Breaking change — sync.  
 Стык: curl + AC в чате.
 
 ## Pacing

@@ -17,7 +17,7 @@
 
 ## Backend
 
-- Валидация ответа Pydantic (уже в плане)
+- Явные Go structs + json tags; не отдавать сырой dump RR клиенту
 - Ошибки RR → fallback fixture, без утечки stack trace с секретами клиенту
 - Не проксировать произвольные URL (SSRF): только фиксированный `RR_BASE_URL`
 

@@ -1,43 +1,39 @@
-# Backend Activity BFF
+# Backend Activity BFF (Go)
 
-Всё нужное здесь. Не открывать senior-backend целиком.
+Всё нужное здесь.
 
 ## Зона
 
 `apps/bff/**` + integrator корня. Web — read-only.
 
-## Стек
+## Стек (зафиксировано)
 
-- **Go (chi/net/http) или FastAPI** — выбрать на T0; RR-продукт на Go, но BFF может быть любым
+- **Go 1.22+**, stdlib `net/http` (опционально `go-chi/chi` если удобно)
 - Контракт JSON: процессы с **`exec_id`**, **`parent_exec_id`**, pid/binary/args; сеть; events
 - Нормализатор dump Tetragon/RR → nodes/edges для React Flow + items для vis-timeline
-- `GET /api/activity?pod=&namespace=` → payload
-- `X-Data-Source: fixture | live`
+- `GET /healthz`, `GET /api/activity?pod=&namespace=`
+- Заголовок ответа `X-Data-Source: fixture | live`
 - Live: public-api через reverse-proxy (`:9000` / `:32000`), не парсинг логов
-- Тест: fixture валидируется / golden JSON
+- Тест: `go test` на normalize + чтение fixture
+- Старт с stub: `hackathon-kit/stubs/bff/main.go` + `go.mod`
+- Env: `hackathon-kit/stubs/bff/env.example` → локально `.env` (не в OnlyGo)
+- Dump от **Platform** в `fixtures/raw/`
 
 ## Порядок коммитов (pacing)
 
-1. Каркас app + роут health/activity stub  
-2. Pydantic-модели + чтение fixture  
-3. Нормализация dump → ActivityPayload  
-4. Live client (опционально) + fallback на fixture  
-5. pytest схемы  
+1. `go mod` + `/healthz` + stub `/api/activity`  
+2. structs + чтение fixture  
+3. Normalize dump → ActivityPayload  
+4. Live HTTP client + fallback fixture  
+5. `go test` на normalize  
 
 ## Паттерны API
 
-- Явные типы, без «сырого dict» в публичном ответе.
-- Ошибки RR → 200 + fixture + `X-Data-Source: fixture` (демо не должно краснеть) или 502 только если явно `?source=live`.
+- Явные struct + `encoding/json`, без «сырого map» в публичном ответе без нужды.
+- Ошибки RR → 200 + fixture + `X-Data-Source: fixture` (демо не краснеет).
 - Без БД, без auth-сервиса, без GraphQL.
-- CORS только для Vite origin.
-
-## Контракт (мини-чеклист API)
-
-- Один ресурс activity, поля стабильны (Pydantic).
-- Ошибки RR не валят демо (fallback fixture).
-- OpenAPI отдаётся; breaking rename — только на sync.
-- Точечно: `_borghei/api-design-reviewer.md`, pytest идеи `_borghei/api-test-suite-builder.md`
+- CORS только Vite origin.
 
 ## Не делать
 
-Миграции БД, load-test, Express scaffolder, микросервисный сплит.
+FastAPI/Python BFF (стек = Go); миграции БД; микросервисный сплит.

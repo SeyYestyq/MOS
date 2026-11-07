@@ -15,7 +15,7 @@ Docs / `BASE.md` / питч — **не отдельная роль**: кажды
 | Слой | Стек | Комментарий |
 |------|------|-------------|
 | **Frontend** | React + TS + Vite + **Zustand** + **@xyflow/react** + dagre + **vis-timeline** | Так рекомендует гайд; UI **не** на Go |
-| **Backend (BFF)** | **Go** (`net/http` или chi) **или** FastAPI | RR сам на Go — Go-BFF плюс к «потенциалу»; FastAPI быстрее с агентами. **Выбор Backend на T0.** Нормализация: `exec_id` → nodes/edges |
+| **Backend (BFF)** | **Go** (`net/http` / chi) | Зафиксировано командой. Нормализация: `exec_id` → nodes/edges. Stub: `stubs/bff/main.go` |
 | **Данные** | public-api / dump JSON Events (+ опц. webhook) | Fixture-first |
 | **Не делать** | Писать eBPF/Tetragon сами; дерево только по pid/ppid | |
 
@@ -70,7 +70,7 @@ Sync каждые **45–60 мин**. Integrator контракта = **Backend*
 | F7 | Incident Summary + Copy | текст SOC |
 | F8 | Replay (если успеем) | scrub таймлайна |
 
-**Не делает:** Helm/RR, Pydantic BFF.
+**Не делает:** Helm/RR, Go BFF.
 
 ---
 
@@ -81,7 +81,7 @@ Sync каждые **45–60 мин**. Integrator контракта = **Backend*
 
 | # | Задача | AC |
 |---|--------|-----|
-| B1 | BFF scaffold (Go **или** FastAPI) + контракт JSON | `/api/activity` (+ openapi если FastAPI) |
+| B1 | Go BFF scaffold + structs + `/api/activity` | `go run .` + curl |
 | B2 | Fixture + `X-Data-Source` | демо без кластера |
 | B3 | Normalize: **exec_id / parent.exec_id** → nodes/edges + timeline items | Frontend ест готовый граф |
 | B4 | Live: public-api / dump / опц. webhook | fallback fixture |
@@ -144,7 +144,7 @@ Sync каждые **45–60 мин**. Integrator контракта = **Backend*
 Правила только в `МосХаб/hotel/`.  
 Промпт: `Разрешённые пути: … . Чужое read-only.`
 
-Стек: Vite/React/xyflow · FastAPI/Pydantic · fixture-first.  
+Стек: Vite/React/xyflow · **Go BFF** · fixture-first.  
 Коммиты: scaffold → fixture → tree → panels → sync → summary → live → docs/BASE.
 
 ---
@@ -164,7 +164,7 @@ BASE.md
 ## 6. Архитектура
 
 ```
-Runtime Radar (:9000) ──▶ BFF (Pydantic) ──▶ Web (xyflow + panels + Incident Summary)
+Runtime Radar (:9000) ──▶ BFF (Go) ──▶ Web (xyflow + panels + Incident Summary)
          │                     ▲
          └── dump / fixture ───┘
 ```
@@ -186,7 +186,8 @@ Live: HTTP API. См. `.rr-install/ACCESS.md`.
 
 ### T0
 - Frontend: scaffold web + css  
-- Backend: scaffold BFF + Pydantic  
+- Backend: scaffold Go BFF + fixture  
+
 - Platform: filter + gen-activity; stubs docs/CHANGELOG/BASE в репо  
 
 ### T1–T2
