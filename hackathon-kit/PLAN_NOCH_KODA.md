@@ -2,7 +2,8 @@
 
 **Задача:** №2 «Интерактивная карта активности контейнера»  
 **Партнёр:** Positive Technologies (команда PT Container Security & Runtime Radar)  
-**Команда:** **3 человека** (Frontend Engineer / Backend Engineer / Platform Engineer)  
+**Команда:** **Ангелина** (Frontend) · **Дамир** (DevOps + Backend-интегратор) · **Денис** (Backend)  
+**Ветки задач:** `hackathon-kit/TEAM_ROLES.md`  
 **Репозиторий сдачи:** `OnlyGo` на платформе «Мос.Хаб» (`git@hub.mos.ru:event_DIT/2026/onlygo.git`)  
 **Техническая и нормативная база:**
 - Описание задачи: `OnlyGo/Задача_Positive_Technologies_описание_задачи.pdf`
@@ -204,44 +205,25 @@
 
 ---
 
-## 5. Распределение ролей и зон ответственности (3 инженера)
+## 5. Распределение ролей — Ангелина / Дамир / Денис
 
-Синхронизация каждые **45–60 минут**. Хранитель API-контракта и интегратор — **Backend Engineer**.
+Синхронизация каждые **45–60 минут**. Полные чеклисты: **`TEAM_ROLES.md`**.  
+Хранитель контракта JSON — **Денис**. Live RR + dump + корень стенда — **Дамир**. UI — **Ангелина**.
 
-### 5.1. Frontend Engineer
-- **Зона:** `apps/web/**`
-- **Стек:** React 18+, TypeScript, Vite, `@xyflow/react`, `@dagrejs/dagre`, `vis-timeline`, `zustand`, `lucide-react`.
-- **Задачи:**
-  - [ ] **F1:** Scaffold Vite React TS, подключение дизайн-системы `activity-map.css`.
-  - [ ] **F2:** Реализация Single Pane of Glass (4 квадранта) с заголовком Instant Highlights.
-  - [ ] **F3:** Process Tree на `@xyflow/react` + Dagre с кастомными карточками и логикой ego-graph.
-  - [ ] **F4:** Network Map (Hubble UI style) с привязкой сокетов к `exec_id`.
-  - [ ] **F5:** 3-Lane Timeline на `vis-timeline` (groups). Стрелки `timeline-arrows` — Could.
-  - [ ] **F6:** Zustand: Brushing & Linking + Time-Window Brush (Must/Should).
-  - [ ] **F7:** Should: Attack Path + MITRE; Could: Replay scrubber / ego-graph package.
-  - [ ] **F8:** Should: Incident Summary copy; Could: TracingPolicy YAML; Should: Import JSON dump (выгрузки Events).
+### 5.1. Ангелина — Frontend (`apps/web/**`)
+- **Стек:** React + TS + Vite + `@xyflow/react` + dagre + `vis-timeline` + Zustand.
+- **Задачи:** A1–A6 Must (scaffold → tree → net → timeline → sync); A7–A8 Should (Summary/MITRE/Import); A9 Could.
+- После Must UI — docs/питч jointly.
 
-### 5.2. Backend Engineer (Интегратор)
-- **Зона:** `apps/bff/**`, корень репозитория, целостность API-контрактов.
-- **Стек:** Go 1.22+, `net/http` / `chi`, `encoding/json`.
-- **Задачи:**
-  - [ ] **B1:** Scaffold Go BFF (`apps/bff`), `/healthz`, `/api/activity` с заголовком `X-Data-Source: live | fixture`.
-  - [ ] **B2:** Контракт данных: строгий DAG по `exec_id` / `parent_exec_id`, сокеты из `sock_arg`, флаги `in_init_tree`.
-  - [ ] **B3:** Парсер-нормализатор Tetragon (`fixtures/raw/events.json` / live): рёбра только `parent_exec_id`→`exec_id`; merge EXEC+EXIT → range; sock_arg → net; **фильтр по `time`/`start_time`** (отрезать bootstrap); поля `Severity`/`Reason`/`TacticsCovered`.
-  - [ ] **B4:** Smart Noise Folding (Should) для режима `All`.
-  - [ ] **B5:** Live: **REST public-api slice** (полный JSON с `args`/sock_arg) + fallback fixture; ClickHouse только как доп. корпус **без** сети; curl из P6 до live.
-  - [ ] **B6:** XSS sanitize + `go test ./...`.
+### 5.2. Денис — Backend (`apps/bff/**`)
+- **Стек:** Go `net/http`, контракт `types.ts`, тесты.
+- **Задачи:** C1–C7 Must (BFF, нормализатор exec_id/sock_arg, fixture+raw, XSS, `go test`, сверка curl↔UI); C8 Should Noise Folding; C9 Could risk/windows/insight.
+- Отвечает, что бэкенд **работает и доказан тестами**.
 
-### 5.3. Platform Engineer
-- **Зона:** `scripts/**`, `deploy/**`, `fixtures/raw/**`, кластер k8s и Runtime Radar.
-- **Инструменты:** Linux, kind/k3s, Helm 3, eBPF/BTF, `kubectl`.
-- **Задачи:**
-  - [ ] **P1:** Linux-стенд (не голый Mac Docker Desktop); BTF check; Helm **v0.3.0** + `global.administrator.*`; без prometheus/grafana; port-forward `:9000` / NodePort `:32000`.
-  - [ ] **P2:** Sources: process + **incoming socket listen**; Allow `hackathon`; **All**; Apply; smoke Events.
-  - [ ] **P3:** `scripts/gen-activity.sh` (4 фазы + **отдельный ls после nc**).
-  - [ ] **P4:** Dump через **REST slice** (не полагаться на CH для сети) → `fixtures/raw/events.json` в первый час; запас — 67 JSON из testdata детекторов.
-  - [ ] **P5:** 10-мин triage RR → fixture; не чинить eBPF всю ночь; **не** включать `tcp_sendmsg` на широком ns.
-  - [ ] **P6:** Таблица URL/auth + рабочий `curl` slice/`Access-Token` для Backend до T4.
+### 5.3. Дамир — DevOps + Backend-интегратор (`scripts/**`, `deploy/**`, `fixtures/raw/**`, live-стык)
+- **Инструменты:** Linux, Helm v0.3.0, kubectl, REST slice.
+- **Задачи:** B1–B6 Must (стенд RR, Sources+listen, gen-activity+flush ls, REST dump, curl/Access-Token); B7–B8 Should (live wiring BFF, README стенда); B9 дисциплина triage.
+- Даёт данные в мир Дениса; не уводит ночь в починку eBPF.
 
 ---
 

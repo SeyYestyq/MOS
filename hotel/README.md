@@ -1,16 +1,13 @@
 # hotel/ — скиллы отдельно от репозитория сдачи
 
-Держать **рядом** с клоном OnlyGo на диске.  
-**Никогда** не `git add` / не push в OnlyGo и не в «основной» продуктовый реп.
+Держать **рядом** с клоном OnlyGo. **Никогда** не коммитить в OnlyGo.
 
-Код пишется только в **OnlyGo** (Мос.Хаб). Этот каталог — инструкции для людей и агентов.
+Команда: **Ангелина** (FE) · **Денис** (BE) · **Дамир** (DevOps + live).  
+Ветки задач: `../hackathon-kit/TEAM_ROLES.md`.
 
 | Путь | Зачем |
 |------|--------|
-| `AGENTS.md` | зоны Frontend / Backend / Platform + стек |
+| `AGENTS.md` | зоны и стек по людям |
 | `SKILLS.md` | карта skills 01–11 |
-| `skills/` | пошаговые инструкции |
+| `skills/` | инструкции |
 | `prompts/` | брифы и QUICK_START |
-
-Перенос stubs → OnlyGo: `prompts/QUICK_START_FOR_TEAM.md`.  
-Где работать / что не пушить: `../hackathon-kit/DO_NOT_PUSH.txt`.

@@ -1,8 +1,8 @@
 # AGENTS.md (локально / hotel — НЕ коммитить в OnlyGo)
 
 Хакатон: Ночь кода · PT · Activity Map.  
-Команда: **3 инженера** — Frontend / Backend / Platform.  
-Docs, BASE, питч — общая лёгкая нагрузка в конце, не отдельная роль.
+Команда: **Ангелина** (Frontend) · **Дамир** (DevOps + Backend-интегратор) · **Денис** (Backend).  
+Ветки задач: `../hackathon-kit/TEAM_ROLES.md`. Docs/BASE/питч — jointly в конце.
 
 ## Где код
 
@@ -17,40 +17,35 @@ Docs, BASE, питч — общая лёгкая нагрузка в конце,
 - `apps/bff`: **Go** (`net/http`); контракт JSON `/api/activity`  
 - Граф процессов: рёбра по **`exec_id` → `parent.exec_id`**, не только pid/ppid  
 - Данные: RR public-api / dump **или** fixture  
-- Стиль: `../hackathon-kit/design/activity-map.css`  
-- Сам RR на Go — не значит писать UI на Go (см. `hackathon-kit/refs/RR_MATERIALS_NOTES.md`)
+- Стиль: `../hackathon-kit/design/activity-map.css`
 
 ## Path ownership
 
-| Роль | Можно писать | Нельзя |
-|------|--------------|--------|
-| **Frontend** | `apps/web/**` | `apps/bff/**`, scripts RR |
-| **Backend** | `apps/bff/**`; корень как integrator | `apps/web/**` без joint |
-| **Platform** | `scripts/**`, `deploy/**`, `fixtures/raw/**` | `apps/**` без просьбы |
+| Кто | Можно писать | Нельзя |
+|-----|--------------|--------|
+| **Ангелина** | `apps/web/**` | `apps/bff/**`, scripts RR |
+| **Денис** | `apps/bff/**` (+ tests); контракт | `apps/web/**` без joint; не ломать RR-стенд Дамира |
+| **Дамир** | `scripts/**`, `deploy/**`, `fixtures/raw/**`, env.example, compose; live-стык BFF jointly | UI Ангелины без просьбы; нормализатор без согласования с Денисом |
 
-`docs/**`, `CHANGELOG.md`, `BASE.md`, `README.md` — пишут **все** по своим кускам; финальный BASE — joint.
+`docs/**`, `CHANGELOG.md`, `BASE.md`, `README.md` — все по кускам; финальный BASE — joint.
 
 Промпт агенту:  
-`Разрешённые пути: … . Остальное read-only. Корень (compose/Makefile) — только Backend-integrator.`
+`Разрешённые пути: … . Остальное read-only.`
 
 ## Контракт / handoff
 
-Контракт = Go structs / JSON schema + `stubs/types.ts`. Breaking change — sync.  
-Стык: curl + AC в чате.
-
-## Pacing
-
-scaffold → fixture → tree → panels → sync → summary → live → docs/BASE.
+Контракт = Go structs + `stubs/types.ts` — владелец **Денис**. Breaking change — sync с Ангелиной.  
+Raw dump + curl slice — **Дамир** → Денис. Стык: curl + AC в чате.
 
 ## Skills
 
-| Роль | Файлы |
-|------|--------|
-| Frontend | `03`, `09` |
-| Backend | `02` |
-| Platform | `01`, `07` |
-| Все | `08`, `11` (ИБ), `05` (freeze), `10` + `04` (docs/питч в конце) |
+| Кто | Файлы |
+|-----|--------|
+| Ангелина | `03`, `09` |
+| Денис | `02`, `08`, `11` |
+| Дамир | `01`, `07`, куски `02` (live) |
+| Все | `05` (freeze), `10` + `04` (docs/питч) |
 
 ## DoD
 
-Tree + network + timeline + sync; Incident Summary; fixture; README; CHANGELOG; BASE.md; демо < 60s; Public.
+Tree + network + timeline + sync; Incident Summary; fixture; README; CHANGELOG; BASE.md; демо < 60s; Public; `go test` зелёный.

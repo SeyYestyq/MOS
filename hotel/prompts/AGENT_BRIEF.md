@@ -1,31 +1,21 @@
 # AGENT BRIEF — Activity Map (PT / Runtime Radar)
 
 После старта работаем **только в OnlyGo** (Мос.Хаб).  
-`hotel/` (скиллы) — отдельная папка на диске, в OnlyGo **не** коммитить.  
-Stubs из `hackathon-kit/` — перенести в OnlyGo и реализовывать план там; prep/MOS не продолжать.
+`hotel/` — отдельная папка на диске. Stubs из `hackathon-kit/` → перенести в OnlyGo.  
+Ветки людей: `hackathon-kit/TEAM_ROLES.md`.
 
-## Задача
+## Роли
 
-Одно окно: хронология + дерево процессов + сеть — аналитик ИБ восстанавливает картину быстро.
-
-## Роли (3 инженера)
-
-| Роль | Зона | Skill |
-|------|------|-------|
-| **Frontend** | `apps/web/**` | `03` (+ `09`) |
-| **Backend** | `apps/bff/**` | `02` |
-| **Platform** | `scripts/**`, `fixtures/raw/**` | `01` |
-
-Docs / `BASE.md` / питч — **общая** работа в конце, не вместо кода.
+| Кто | Зона | Skill |
+|-----|------|-------|
+| **Ангелина** | `apps/web/**` | `03` (+ `09`) |
+| **Денис** | `apps/bff/**` (+ tests, контракт) | `02` |
+| **Дамир** | `scripts/**`, `fixtures/raw/**`, live-стык | `01`, `07` |
 
 ## Стек
 
-Vite/React/xyflow+dagre+vis-timeline+Zustand · **Go BFF** · fixture-first · live RR по HTTP.
-
-## Сдача
-
-Код + docs + **BASE.md** (ИИ) + презентация + демо < 60s.
+Vite/React/xyflow+dagre+vis-timeline+Zustand · **Go BFF** · fixture-first · live RR по REST slice.
 
 ## DoD
 
-Tree + network + timeline + sync + Incident Summary; fixture; README; CHANGELOG; BASE; Public; без hotel в git.
+Tree + network + timeline + sync + Incident Summary; fixture; `go test`; README; CHANGELOG; BASE; Public; без hotel в git.

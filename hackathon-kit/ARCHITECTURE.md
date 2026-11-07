@@ -42,11 +42,13 @@
 Platform: kind/Helm RR · Sources/All · gen-activity · dump → fixtures/raw/
 ```
 
-| Роль | Зона | Стремится к |
-|------|------|-------------|
-| **Frontend** | `apps/web` | одно окно, sync панелей, читаемый Attack Path |
-| **Backend** | `apps/bff` + контракт | правильный DAG + сеть из sock_arg + fallback |
-| **Platform** | кластер / scripts / raw dump | живые события + воспроизводимый сценарий nc:8888 |
+| Кто | Зона | Стремится к |
+|-----|------|-------------|
+| **Ангелина** | `apps/web` | одно окно, sync панелей, Attack Path |
+| **Денис** | `apps/bff` + контракт + тесты | DAG exec_id + sock_arg + fixture + `go test` |
+| **Дамир** | RR / scripts / raw dump + live-стык | живые события, dump с args, сценарий nc:8888 |
+
+Чеклисты: `TEAM_ROLES.md`.
 
 ---
 
