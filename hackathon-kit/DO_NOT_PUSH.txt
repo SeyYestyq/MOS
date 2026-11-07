@@ -3,12 +3,11 @@
 ═══════════════════════════════════════════════════════════════
 
 1) Репозиторий СДАЧИ и ВСЯ разработка кода:
-   OnlyGo на «Мос.Хаб»
-   git@hub.mos.ru:event_DIT/2026/onlygo.git
+   Локально: МосХаб/OnlyGo
+   Remote: git@hub.mos.ru:event_DIT/2026/onlygo.git
 
-   После старта: клонируете OnlyGo → переносите заготовки из
-   hackathon-kit/ → пишете apps/web, apps/bff, scripts, docs
-   ТОЛЬКО там. История коммитов OnlyGo = то, что видит жюри.
+   Работаем и пушим СЮДА потихоньку. hackathon-kit/ — справочник
+   и запас stubs; новые фичи — сразу в OnlyGo.
 
 2) Этот репозиторий (github.com/SeyYestyq/MOS, ветка prep)
    = только подготовка / бэкап плана и stubs.

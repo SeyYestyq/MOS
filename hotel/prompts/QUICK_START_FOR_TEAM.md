@@ -4,9 +4,10 @@
 
 ## 0. Где работаем
 
-1. Клон **OnlyGo** (Мос.Хаб) — единственный git для кода.
-2. Рядом: `МосХаб/hotel/` (скиллы) + `МосХаб/hackathon-kit/` (заготовки).
-3. `cp` stubs в OnlyGo → коммиты только в OnlyGo. MOS/prep не для фич.
+1. Рабочий репозиторий: **`МосХаб/OnlyGo`** → `git@hub.mos.ru:event_DIT/2026/onlygo.git`.
+2. Рядом: `МосХаб/hotel/` (скиллы) + `МосХаб/hackathon-kit/` (справочник).
+3. Пишем и пушим **только в OnlyGo**. MOS/prep — не для фич продукта.
+4. BFF уже в `OnlyGo/apps/bff` (Go). Web — `apps/web` (Ангелина).
 
 ---
 
