@@ -5,13 +5,14 @@
 **Команда:** **Ангелина** (Frontend) · **Дамир** (DevOps + Backend-интегратор) · **Денис** (Backend)  
 **Ветки задач:** `hackathon-kit/TEAM_ROLES.md`  
 **Репозиторий сдачи:** `OnlyGo` на платформе «Мос.Хаб» (`git@hub.mos.ru:event_DIT/2026/onlygo.git`)  
-**Техническая и нормативная база:**
-- Описание задачи: `OnlyGo/Задача_Positive_Technologies_описание_задачи.pdf`
-- Критерии оценки: `OnlyGo/Критерии_оценки_задачи_Интерактивная_карта_активности_контейнера.pdf`
-- Требования к ПО: `OnlyGo/Требования_к_ПО_задачи_Интерактивная_карта_активности_контейнера.pdf`
-- Стенограмма брифинга эксперта PT (Святослав Сорокин): `Новая запись 4.txt`
-- Архитектурный гид и референсы: `Материалы по Runtime Radar.docx`
-- Реестр технических материалов и отраслевых UX-паттернов: `Материалы для карты активности контейнера.docx`
+**Техническая и нормативная база (для команды — наши файлы, не исходные docx):**
+- Вектор продукта: `hackathon-kit/ARCHITECTURE.md`
+- Ветки людей: `hackathon-kit/TEAM_ROLES.md`
+- Выжимка RR + аудит: `hackathon-kit/refs/RR_MATERIALS_NOTES.md`
+- PDF задачи/критерии/требования — в `OnlyGo/` на Мос.Хабе (и копии в `hackathon-kit/refs/` при наличии)
+- Официальные docs RR: [help](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/help/help.md), [restapi](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/restapi/restapi.md), [detectors](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/detectors/guide.md)
+
+Исходные `.docx` (PT-материалы) **не обязательны** для работы: всё нужное уже перенесено сюда. Архив по желанию: `hackathon-kit/refs/*.docx`.
 
 ### 0. Где работаем командой (обязательно)
 
@@ -238,9 +239,9 @@
 
 ---
 
-## 5.5. Аудит материалов (docx + МАТЕРИАЛЫ.md/csv) + GitHub — что ещё добить
+## 5.5. Аудит материалов + GitHub — что ещё добить
 
-Проверено по docx, `МАТЕРИАЛЫ (1).md` / `materials (1).csv` / `README (1).md`, [detectors/guide](https://github.com/Runtime-Radar/runtime-radar/blob/main/docs/guides/detectors/guide.md), [help.md](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/help/help.md), [restapi.md](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/restapi/restapi.md), [Tetragon Events](https://tetragon.io/docs/concepts/events/).
+Источники аудита уже схлопнуты в этот план и `refs/RR_MATERIALS_NOTES.md` (docx команде читать не нужно). Сверка: [detectors/guide](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/detectors/guide.md), [help.md](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/help/help.md), [restapi.md](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/restapi/restapi.md), [Tetragon Events](https://tetragon.io/docs/concepts/events/).
 
 | Тема | Статус в плане | Добивка |
 |------|----------------|---------|

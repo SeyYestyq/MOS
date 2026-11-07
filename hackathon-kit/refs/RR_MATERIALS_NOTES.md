@@ -1,10 +1,9 @@
 # Выжимка материалов RR + аудит ссылок
 
-Источники:
-- `../Материалы по Runtime Radar.docx`
-- `../Материалы для карты активности контейнера.docx`
-- GitHub: [Runtime-Radar/runtime-radar](https://github.com/Runtime-Radar/runtime-radar)
-- [detectors/guide.md](https://github.com/Runtime-Radar/runtime-radar/blob/main/docs/guides/detectors/guide.md)
+Источники (выжимка уже здесь — исходные `.docx` команде не нужны):
+- архив PT docx (опционально): `refs/*.docx`
+- GitHub: [Runtime-Radar/Runtime-Radar](https://github.com/Runtime-Radar/Runtime-Radar)
+- [help](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/help/help.md) · [restapi](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/restapi/restapi.md) · [detectors/guide](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/detectors/guide.md)
 - [Tetragon Events](https://tetragon.io/docs/concepts/events/)
 
 ## Стек нашего решения
