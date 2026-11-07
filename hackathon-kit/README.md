@@ -15,12 +15,14 @@
 
 | Папка | Что | В OnlyGo? |
 |-------|-----|-----------|
+| `apps/bff/` | **рабочий Go BFF** (fixture/raw/live) | да → OnlyGo `apps/bff/` |
+| `scripts/` | `gen-activity.sh`, `dump-rr-events.sh` (Дамир) | да → OnlyGo `scripts/` |
 | `design/` | `activity-map.css` + tokens / STYLE_GUIDE | да → `apps/web/src/styles/` |
-| `fixtures/` | `sample-activity.json` | да → `apps/bff/fixtures/` |
-| `stubs/` | Go BFF, web stubs, CONTRACT, types, BASE, CHANGELOG, docs | да → `apps/*`, корень |
+| `fixtures/` | `sample-activity.json` + `raw/` | да → `apps/bff/fixtures/` / `fixtures/raw/` |
+| `stubs/` | web stubs, CONTRACT, types, BASE, CHANGELOG, docs | да → `apps/web`, корень |
 | `PLAN_NOCH_KODA.md` | план победы | ориентир; в OnlyGo — README по делу |
-| `ARCHITECTURE.md` | вектор продукта: слои, модель данных, UX-цель | читать всей команде |
-| `TEAM_ROLES.md` | 3 ветки: Ангелина / Дамир / Денис | задачи по людям |
-| `refs/` | PDF / заметки по материалам RR | локально / по желанию |
+| `ARCHITECTURE.md` | вектор продукта | читать всей команде |
+| `TEAM_ROLES.md` | Ангелина / Дамир / Денис | задачи по людям |
+| `refs/` | PDF / заметки RR | локально / по желанию |
 
 Правила агентов: **`../hotel/`** (не коммитить).

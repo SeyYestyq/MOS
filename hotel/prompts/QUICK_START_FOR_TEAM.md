@@ -23,24 +23,25 @@ Skills: `03`, `09`. Порядок: tree → network → timeline → Zustand �
 
 ---
 
-## Денис — Backend
+## Денис — Backend (Go)
 ```bash
-mkdir -p apps/bff/fixtures
-cp ../hackathon-kit/stubs/bff/main.go ../hackathon-kit/stubs/bff/go.mod apps/bff/
-cp ../hackathon-kit/stubs/bff/env.example apps/bff/
-cp ../hackathon-kit/fixtures/sample-activity.json apps/bff/fixtures/
-cd apps/bff && go run .
-# http://localhost:8000/api/activity
+cp -r ../hackathon-kit/apps/bff apps/bff
+cd apps/bff && go test ./... && go run .
+# http://localhost:8000/api/activity  → X-Data-Source: fixture
 ```
-Skills: `02`, `08`, `11`. Нормализатор exec_id + sock_arg; `go test`; XSS; сверка curl↔UI.  
-Raw dump ждёт от Дамира → подключить в нормализатор.
+Skills: `02`, `08`, `11`. Дожимать нормализатор под реальный dump; `go test`; сверка curl↔UI.  
+Уже есть: sanitize, fixture, raw normalize, live client skeleton.
 
 ---
 
 ## Дамир — DevOps + live-стык
-- Linux/Lima; Helm **v0.3.0**; Sources process + **incoming listen**; Allow `hackathon`; All.
-- `gen-activity.sh` (+ **ls после nc**); REST slice dump → `fixtures/raw/`; curl + Access-Token Денису.
-- Skills: `01`, `07`. Live wiring BFF jointly с Денисом.
+```bash
+cp -r ../hackathon-kit/scripts scripts
+# Sources process + incoming listen; Allow hackathon; All
+./scripts/gen-activity.sh
+RR_TOKEN=... RR_BASE_URL=https://localhost:9000 ./scripts/dump-rr-events.sh
+```
+Skills: `01`, `07`. Live: `DATA_MODE=live` в `apps/bff` jointly с Денисом.
 
 ---
 
