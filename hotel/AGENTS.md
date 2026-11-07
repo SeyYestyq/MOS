@@ -6,10 +6,12 @@ Docs, BASE, питч — общая лёгкая нагрузка в конце,
 
 ## Стек
 
-- `apps/web`: Vite + React + TS + **@xyflow/react** + dagre  
-- `apps/bff`: FastAPI + Pydantic → `/openapi.json`  
-- Данные: RR HTTP **или** fixture  
-- Стиль: `../hackathon-kit/design/activity-map.css`
+- `apps/web`: Vite + React + TS + **Zustand** + **@xyflow/react** + dagre + **vis-timeline**  
+- `apps/bff`: **Go или FastAPI** (решение Backend на T0); контракт JSON `/api/activity`  
+- Граф процессов: рёбра по **`exec_id` → `parent.exec_id`**, не только pid/ppid  
+- Данные: RR public-api / dump **или** fixture  
+- Стиль: `../hackathon-kit/design/activity-map.css`  
+- Сам RR на Go — не значит писать UI на Go (см. `hackathon-kit/refs/RR_MATERIALS_NOTES.md`)
 
 ## Path ownership
 

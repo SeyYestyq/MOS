@@ -11,7 +11,8 @@
 
 1. RR жив: pods, port-forward `:9000`.  
 2. Sources; Allow filter ns; сохранение **All**.  
-3. Тестовая активность (`kubectl exec`, `curl`/`wget` с паузами).  
+3. Тестовая активность: ns `hackathon`, nginx+alpine, `ls`/`cat`/`curl`/`wget`, затем `nc -l -p 8888` + `ls` (детектор/MITRE). См. `hackathon-kit/refs/RR_MATERIALS_NOTES.md`.  
+
 4. Events не пустые.  
 5. Dump → `fixtures/raw/` для Backend.  
 6. RR упал → ≤10 мин triage → fixture (`07-focused-fix.md`).  

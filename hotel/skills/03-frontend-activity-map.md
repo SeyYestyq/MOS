@@ -8,11 +8,13 @@
 
 ## Стек (фиксировано)
 
-- Vite + React + TypeScript
-- **`@xyflow/react`** + **`@dagrejs/dagre`**
-- Типы: скопировать `hackathon-kit/stubs/types.ts`
-- Стиль: **только** `hackathon-kit/design/` → один импорт `activity-map.css`
-- Fixture через BFF или `public/sample-activity.json`
+- Vite + React + TypeScript + **Zustand** (selection sync)
+- **`@xyflow/react`** + **`@dagrejs/dagre`** (дерево)
+- **`vis-timeline`** (таймлайн)
+- Узлы/рёбра дерева: **`exec_id` / `parent.exec_id`** (не строить только по pid)
+- Типы: из контракта BFF / `hackathon-kit/stubs/types.ts` (обновить под exec_id)
+- Стиль: **только** `hackathon-kit/design/` → `activity-map.css`
+- Fixture через BFF
 
 ## T0 — скопировать стили (не изобретать)
 

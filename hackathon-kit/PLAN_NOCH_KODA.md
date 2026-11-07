@@ -3,11 +3,23 @@
 **Задача:** Интерактивная карта активности контейнера (Positive Technologies / Runtime Radar)  
 **Команда:** **3 человека** — три инженерные роли (Frontend / Backend / Platform)  
 **Репо сдачи:** `OnlyGo` на Мос.Хаб (`git@hub.mos.ru:event_DIT/2026/onlygo.git`)  
-**Официальное описание:** `hackathon-kit/refs/Задача_Positive_Technologies_описание_задачи.pdf`
+**Официальное описание:** `hackathon-kit/refs/Задача_Positive_Technologies_описание_задачи.pdf`  
+**Материалы RR:** `hackathon-kit/refs/Материалы по Runtime Radar.docx` + выжимка `refs/RR_MATERIALS_NOTES.md`
 
 Эксперт (Святослав Сорокин, PT): помочь аналитику ИБ **быстро восстановить картину** в контейнере — порядок действий, дерево процессов, события, сеть в **одном UX**.
 
 Docs / `BASE.md` / питч — **не отдельная роль**: каждый пишет changelog по своим коммитам; `BASE.md` и слайды собирают **все вместе** в конце (20–30 мин).
+
+### Стек (зафиксировано по материалам RR)
+
+| Слой | Стек | Комментарий |
+|------|------|-------------|
+| **Frontend** | React + TS + Vite + **Zustand** + **@xyflow/react** + dagre + **vis-timeline** | Так рекомендует гайд; UI **не** на Go |
+| **Backend (BFF)** | **Go** (`net/http` или chi) **или** FastAPI | RR сам на Go — Go-BFF плюс к «потенциалу»; FastAPI быстрее с агентами. **Выбор Backend на T0.** Нормализация: `exec_id` → nodes/edges |
+| **Данные** | public-api / dump JSON Events (+ опц. webhook) | Fixture-first |
+| **Не делать** | Писать eBPF/Tetragon сами; дерево только по pid/ppid | |
+
+**Важно:** Go внутри Runtime Radar ≠ «весь наш продукт на Go». Карта для жюри — веб на React.
 
 ---
 
@@ -51,10 +63,10 @@ Sync каждые **45–60 мин**. Integrator контракта = **Backend*
 |---|--------|-----|
 | F1 | Vite React TS + `activity-map.css` | UI открывается |
 | F2 | Типы из OpenAPI / `stubs/types.ts` | fetch `/api/activity` |
-| F3 | Process tree — **xyflow + dagre** | ppid→pid |
+| F3 | Process tree — **xyflow + dagre** | рёбра по **exec_id → parent.exec_id** (не только pid) |
 | F4 | Network panel | edges + select |
-| F5 | Timeline | события по времени |
-| F6 | Selection sync | один selected id |
+| F5 | Timeline (**vis-timeline**) | sync по `exec_id` |
+| F6 | Selection sync (**Zustand**) | один selected `exec_id` |
 | F7 | Incident Summary + Copy | текст SOC |
 | F8 | Replay (если успеем) | scrub таймлайна |
 
@@ -69,11 +81,11 @@ Sync каждые **45–60 мин**. Integrator контракта = **Backend*
 
 | # | Задача | AC |
 |---|--------|-----|
-| B1 | FastAPI + Pydantic `ActivityPayload` | `/openapi.json` |
-| B2 | `GET /api/activity` + fixture | `X-Data-Source: fixture` |
-| B3 | Normalize dump от Platform | pytest схемы |
-| B4 | Live-клиент RR HTTP `:9000` | fallback на fixture |
-| B5 | Integrator / smoke | curl + UI с Frontend |
+| B1 | BFF scaffold (Go **или** FastAPI) + контракт JSON | `/api/activity` (+ openapi если FastAPI) |
+| B2 | Fixture + `X-Data-Source` | демо без кластера |
+| B3 | Normalize: **exec_id / parent.exec_id** → nodes/edges + timeline items | Frontend ест готовый граф |
+| B4 | Live: public-api / dump / опц. webhook | fallback fixture |
+| B5 | Integrator / smoke | curl + UI |
 | B6 | Корень: compose/workspaces | без секретов |
 
 **Не делает:** React Flow; долгий тюнинг kind (это Platform).
@@ -89,7 +101,7 @@ Sync каждые **45–60 мин**. Integrator контракта = **Backend*
 |---|--------|-----|
 | P1 | RR up, port-forward `:9000` | UI логин |
 | P2 | Sources + Allow filter + All | Events не пустые |
-| P3 | Скрипт тестовой активности | дерево/сеть в Events |
+| P3 | Скрипт активности (ls/cat/curl + **nc -l 8888**) | Events + детектор/MITRE |
 | P4 | Dump → `fixtures/raw/` для Backend | файл готов |
 | P5 | Стабильный demo-path на ночь | команда знает fallback |
 | P6 | Помощь Backend с live API (Network tab / endpoints) | список URL в чате |

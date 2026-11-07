@@ -8,13 +8,13 @@
 
 ## Стек
 
-- FastAPI + Pydantic v2
-- Модели = контракт: `ProcessNode`, `NetEdge`, `ActivityEvent`, `ActivityPayload`
+- **Go (chi/net/http) или FastAPI** — выбрать на T0; RR-продукт на Go, но BFF может быть любым
+- Контракт JSON: процессы с **`exec_id`**, **`parent_exec_id`**, pid/binary/args; сеть; events
+- Нормализатор dump Tetragon/RR → nodes/edges для React Flow + items для vis-timeline
 - `GET /api/activity?pod=&namespace=` → payload
-- Заголовок `X-Data-Source: fixture | live`
-- Fixture JSON читается с диска; live — HTTP к Runtime Radar (`:9000` + token из env), не парсинг логов
-- Один pytest: ответ валидируется схемой Pydantic
-- OpenAPI: `/openapi.json` — источник правды для фронта
+- `X-Data-Source: fixture | live`
+- Live: public-api через reverse-proxy (`:9000` / `:32000`), не парсинг логов
+- Тест: fixture валидируется / golden JSON
 
 ## Порядок коммитов (pacing)
 
