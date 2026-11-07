@@ -229,7 +229,7 @@
   - [ ] **B2:** Контракт данных: строгий DAG по `exec_id` / `parent_exec_id`, сокеты из `sock_arg`, флаги `in_init_tree`.
   - [ ] **B3:** Парсер-нормализатор Tetragon (`fixtures/raw/events.json` / live): рёбра только `parent_exec_id`→`exec_id`; merge EXEC+EXIT → range; sock_arg → net; **фильтр по `time`/`start_time`** (отрезать bootstrap); поля `Severity`/`Reason`/`TacticsCovered`.
   - [ ] **B4:** Smart Noise Folding (Should) для режима `All`.
-  - [ ] **B5:** Live: `public-api`/`history-api` (+ опц. webhook) с fallback fixture; артефакт curl из P6 обязателен до live.
+  - [ ] **B5:** Live: **REST public-api slice** (полный JSON с `args`/sock_arg) + fallback fixture; ClickHouse только как доп. корпус **без** сети; curl из P6 до live.
   - [ ] **B6:** XSS sanitize + `go test ./...`.
 
 ### 5.3. Platform Engineer
@@ -239,9 +239,9 @@
   - [ ] **P1:** Linux-стенд (не голый Mac Docker Desktop); BTF check; Helm **v0.3.0** + `global.administrator.*`; без prometheus/grafana; port-forward `:9000` / NodePort `:32000`.
   - [ ] **P2:** Sources: process + **incoming socket listen**; Allow `hackathon`; **All**; Apply; smoke Events.
   - [ ] **P3:** `scripts/gen-activity.sh` (4 фазы + **отдельный ls после nc**).
-  - [ ] **P4:** Dump `fixtures/raw/events.json` в первый час.
-  - [ ] **P5:** 10-мин triage RR → fixture; не чинить eBPF всю ночь.
-  - [ ] **P6:** Таблица URL/auth из DevTools + curl для Backend до T4.
+  - [ ] **P4:** Dump через **REST slice** (не полагаться на CH для сети) → `fixtures/raw/events.json` в первый час; запас — 67 JSON из testdata детекторов.
+  - [ ] **P5:** 10-мин triage RR → fixture; не чинить eBPF всю ночь; **не** включать `tcp_sendmsg` на широком ns.
+  - [ ] **P6:** Таблица URL/auth + рабочий `curl` slice/`Access-Token` для Backend до T4.
 
 ---
 
@@ -251,28 +251,34 @@
 |-----------|-----|--------|
 | **Must** | 3 панели (tree/net/timeline) + Zustand sync + fixture/dump + Go `/api/activity` + exec_id DAG | 30%+25% |
 | **Should** | Attack Path + MITRE badges + Incident Summary copy + Noise Folding | 20% инновация |
-| **Could** | TracingPolicy YAML generator, Replay scrubber, ego-graph npm, timeline-arrows, live webhook | 10% потенциал / вау |
-| **Won't** | Писать свои Wasm-детекторы TinyGo, чинить eBPF всю ночь, Cytoscape «на миллионы рёбер» | время |
+| **Could** | TracingPolicy YAML; Replay; ego-graph; timeline-arrows; webhook; **offline risk-score** (`scores.json` → цвет/окна/reasons) | 10–20% вау |
+| **Won't** | Wasm-детекторы TinyGo; чинить eBPF всю ночь; Cytoscape; GNN/LoRA; Kubernetes Goat / HF-датасеты как Must | время |
 
 ---
 
-## 5.5. Аудит материалов (docx) + GitHub — что ещё добить
+## 5.5. Аудит материалов (docx + МАТЕРИАЛЫ.md/csv) + GitHub — что ещё добить
 
-Проверено по `Материалы для карты…docx`, `Материалы по Runtime Radar.docx`, [detectors/guide.md](https://github.com/Runtime-Radar/runtime-radar/blob/main/docs/guides/detectors/guide.md), [Tetragon Events](https://tetragon.io/docs/concepts/events/).
+Проверено по docx, `МАТЕРИАЛЫ (1).md` / `materials (1).csv` / `README (1).md`, [detectors/guide](https://github.com/Runtime-Radar/runtime-radar/blob/main/docs/guides/detectors/guide.md), [help.md](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/help/help.md), [restapi.md](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/restapi/restapi.md), [Tetragon Events](https://tetragon.io/docs/concepts/events/).
 
 | Тема | Статус в плане | Добивка |
 |------|----------------|---------|
 | exec_id DAG, Go BFF, React Flow+Dagre, vis-timeline, Zustand, nc:8888, MITRE, BASE.md | Учтено | — |
-| **Helm chart version / admin keys** | Слабо | T0: `oci://…/runtime-radar:v0.3.0` (или актуальный tag) + `global.administrator.*`; Habr `v0.1.0` + `auth-center.administrator.*` — **устарело** с v0.2.0. Не деплоить prometheus/grafana без нужды (RAM). |
-| **macOS / Docker Desktop** | Слабо | Tetragon на Mac через обычный Docker Desktop **не** взлетит. Нужен **один Linux-стенд** (Lima/`limactl` или чужой Linux) на всю команду; kind — только если `/sys/kernel/btf/vmlinux` доступен в node. |
-| **Sources: incoming listen socket** | Слабо | В UI явно включить source **Opening of a socket for incoming connections** (+ process), иначе `inet_csk_listen_start` / детектор nc не придёт. |
-| **Flush после nc** | Частично | По detector guide: после `nc -vv -l -p 8888` отдельный `ls -al`, чтобы сбросить буфер в БД. |
-| **start_time / bootstrap Tetragon** | Слабо | При старте агент шлёт exec на уже живые процессы. Нормализатор BFF: резать события **до** окна тестовой активности по `time`/`start_time`. |
-| **Выгрузки Events (ТЗ)** | Частично (fixture) | Must: dump → `fixtures/raw/events.json`. Should: кнопка **Import JSON** на фронте рядом с live. |
-| **Live endpoints** | Задача P6 | Артефакт: таблица URL/method/auth из DevTools `radar-ui` → Events + один рабочий `curl` в README до T4. |
-| **Поля угрозы** | Частично | В контракте ждать `Severity`, `Reason`, `TacticsCovered` (не только «mitre[]» на узле). |
-| **timeline-arrows / ego-graph** | Как must | Перевести в **Could**; fallback — groups без стрелок / ручной focus без npm ego-graph. |
-| **Публичность 6 мес / tie-break** | Нет | DoD: Public + не удалять ≥6 мес; при ничьей выше балл по критерию «Решение» 30%. |
+| **Helm chart version / admin keys** | Слабо | T0: `oci://…/runtime-radar:v0.3.0` + `global.administrator.*`; Habr v0.1 / `auth-center.*` устарело. Без prometheus/grafana без нужды. |
+| **macOS / Docker Desktop** | Слабо | Один Linux-стенд (Lima); не голый Docker Desktop + Tetragon. |
+| **Sources: incoming listen socket** | Слабо | Включить **Opening of a socket for incoming connections** (+ process). |
+| **Не включать tcp_sendmsg широко** | Не было | В All на широком ns `tcp_sendmsg` раздувает поток → только точечно / не включать для демо. |
+| **Flush после nc** | Частично | После `nc -vv -l -p 8888` отдельный `ls -al`. |
+| **start_time / bootstrap** | Слабо | Резать события до окна активности по `time`/`start_time`. |
+| **ClickHouse без args** | Дыра | В `runtime_events` **нет** IP/путей kprobe. Network Map / sock_arg — только из **REST slice** или webhook, не из CH SQL. |
+| **REST slice API** | Слабо (P6) | `GET …/runtime-event/slice/{left\|right}?cursor=&slice_size=` + `Access-Token`. Рабочий curl до T4. |
+| **67 фикстур детекторов RR** | Не было | `event-processor/detector/wasm/*/testdata/` — labeled JSON в формате продукта → быстрый fixture, если dump ещё нет. |
+| **Выгрузки / Import JSON** | Частично | Must: dump REST → `fixtures/raw/`. Should: Import JSON в UI. |
+| **Поля угрозы** | Частично | `Severity`, `Reason`, `TacticsCovered`. |
+| **ML risk overlay** | Нет в Must | Could: offline окна → merge `risk` в BFF; UI красит + reasons. Не Python в рантайме. Каталог датасетов в csv — **Won't на ночи**. |
+| **timeline-arrows / ego-graph** | Could | fallback без npm. |
+| **Публичность 6 мес / tie-break** | DoD | Public ≥6 мес; tie-break → критерий «Решение» 30%. |
+
+Выжимка: `hackathon-kit/refs/RR_MATERIALS_NOTES.md`. Каталог ссылок (`materials.csv`) — справочник, не очередь задач.
 
 ---
 

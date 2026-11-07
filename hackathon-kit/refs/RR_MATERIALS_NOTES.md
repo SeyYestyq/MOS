@@ -39,13 +39,30 @@ RR сам на Go — не значит писать UI на Go.
 - Не ставить prometheus/grafana без нужды.
 - Mac: Lima / общий Linux; не рассчитывать на голый Docker Desktop + Tetragon.
 
-## Интеграция (3 пути)
+## Интеграция (3 пути) — важно из МАТЕРИАЛЫ.md
 
-1. public-api через reverse-proxy (:32000 / :9000) + **JSON выгрузка Events**
-2. history-api / ClickHouse (port-forward)
-3. notifier webhook (опционально)
+1. **REST public-api (обязателен для сети)** — полный JSON **с `args`**  
+   `GET /api/v1/public-api/runtime-event/slice/{left|right}?cursor=<RFC3339>&slice_size=N`  
+   заголовок `Access-Token: <personal token>`  
+   Docs: [help.md](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/help/help.md), [restapi.md](https://github.com/Runtime-Radar/Runtime-Radar/blob/main/docs/guides/restapi/restapi.md)
+2. **ClickHouse / history-api** — быстро и массово, но **без `args`** → **нет IP/путей kprobe**. Не строить Network Map только из CH.
+3. **notifier webhook** (опционально) — поток JSONL в реальном времени.
 
-ТЗ «работа с выгрузками» → dump + желательно Import JSON в UI.
+ТЗ «работа с выгрузками» → dump REST (или UI Events export) + желательно Import JSON в UI.
+
+## Sources / объём
+
+- 12 источников (см. help.md): process + **incoming listen** обязательны для демо nc:8888.
+- **Не** включать `tcp_sendmsg` на широком ns в режиме All — поток взрывается (десятки тысяч evt/мин).
+
+## Быстрый labeled-корпус без атак
+
+В клоне RR: `event-processor/detector/wasm/*/testdata/{positive,negative}_*.json` (~67 шт.) — точный формат продукта для fixture/тестов нормализатора.
+
+## ML на ночи (Could, не Must)
+
+Offline окна → `scores.json` → BFF merge `risk` на process/window → цвет узлов + подсветка таймлайна + reasons в Incident Summary.  
+Не тащить Python в рантайм. Won't: GNN/LoRA/Goat overnight — 55% баллов не про это.
 
 ## UX-референсы
 
