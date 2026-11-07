@@ -19,6 +19,7 @@
 | `fixtures/` | `sample-activity.json` | да → `apps/bff/fixtures/` |
 | `stubs/` | Go BFF, web stubs, CONTRACT, types, BASE, CHANGELOG, docs | да → `apps/*`, корень |
 | `PLAN_NOCH_KODA.md` | план победы | ориентир; в OnlyGo — README по делу |
+| `ARCHITECTURE.md` | вектор продукта: слои, модель данных, UX-цель | читать всей команде |
 | `refs/` | PDF / заметки по материалам RR | локально / по желанию |
 
 Правила агентов: **`../hotel/`** (не коммитить).
