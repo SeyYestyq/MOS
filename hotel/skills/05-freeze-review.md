@@ -13,7 +13,9 @@
 - [ ] OpenAPI и UI согласованы  
 - [ ] Incident Summary копируется  
 - [ ] README + **CHANGELOG.md** + **BASE.md** (блок ИИ заполнен)  
+- [ ] Чеклист ИБ `11-secure-solution.md` зелёный  
 - [ ] Коммиты = этапы, не mega-dump в T+15м  
+
 
 
 ## Красные флаги в diff

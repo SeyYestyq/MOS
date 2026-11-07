@@ -40,7 +40,7 @@ scaffold → fixture → tree → panels → sync → summary → live → docs/
 | Frontend | `03`, `09` |
 | Backend | `02` |
 | Platform | `01`, `07` |
-| Все | `08`, `05` (freeze), `10` + `04` (docs/питч в конце) |
+| Все | `08`, `11` (ИБ), `05` (freeze), `10` + `04` (docs/питч в конце) |
 
 ## DoD
 
