@@ -130,12 +130,12 @@
    $$\text{target.parent\_exec\_id} == \text{source.exec\_id}$$
    Это гарантирует математическую ацикличность графа ($G = (V_p, E_p)$ — строгий DAG) и защищает аналитика от коллизий Linux PID.
 3. **Сетевые связи и сокеты ($E_{net}$):**  
-   Извлекаются из массива аргументов `process_kprobe.args[0].sock_arg` для ядерных функций:
-   - `tcp_connect` / `sys_enter_connect` — исходящие клиентские запросы (`curl`, `wget`).
-   - `tcp_close` — завершение сессии.
-   - `inet_csk_listen_start` — открытие слушающего сокета на порту (`nc -vv -l -p 8888`).
-   - Поля сокета: `saddr:sport` (источник), `daddr:dport` (назначение), `family` (AF_INET), `protocol` (TCP/UDP).
-   - Ребро детерминированно привязывается к породившему `exec_id` процесса из блока `process`.
+   Для `tcp_connect` / `tcp_close` / listen TracingPolicy тип аргумента — **`sock`** → в JSON это **`args[].sock_arg`** (`saddr`, `daddr`, `sport`, `dport`, `family`).  
+   **Не** путать с `sockaddr_arg.addr` (тип `sockaddr` — другой shape; на `tcp_connect` с `type: sock` его нет).
+   - `tcp_connect` — исходящие (`curl`, `wget`).
+   - `tcp_close` — закрытие.
+   - `inet_csk_listen_start` — listen (`nc -l 8888`).
+   - Ребро к `process.exec_id`. Родитель в дереве: `process.parent_exec_id` **или** fallback `parent.exec_id` из сырого JSON.
 4. **Умное шумоподавление (Smart Noise Folding):**  
    В режиме `All` рутинные вызовы (`ls`, `cat /etc/passwd`, частые healthcheck-пробы) группируются алгоритмом нормализации в компактные узлы-стеки с индикатором «$\times N$ вызовов», которые раскрываются по клику.
 5. **Защита от Stored/Reflected XSS:**  
@@ -234,8 +234,8 @@
 |-----------|-----|--------|
 | **Must** | 3 панели (tree/net/timeline) + Zustand sync + fixture/dump + Go `/api/activity` + exec_id DAG | 30%+25% |
 | **Should** | Attack Path + MITRE badges + Incident Summary copy + Noise Folding | 20% инновация |
-| **Could** | TracingPolicy YAML; Replay; ego-graph; timeline-arrows; webhook; **offline risk-score** (`scores.json` → цвет/окна/reasons) | 10–20% вау |
-| **Won't** | Wasm-детекторы TinyGo; чинить eBPF всю ночь; Cytoscape; GNN/LoRA; Kubernetes Goat / HF-датасеты как Must | время |
+| **Could** | TracingPolicy YAML; Replay; ego-graph; timeline-arrows; webhook; offline risk **только на окне/атакующем exec_id** (не красить всё окно) | 10–20% вау |
+| **Won't** | Wasm-детекторы; чинить eBPF всю ночь; Cytoscape; GNN/LoRA; Goat/HF как Must; **ROC-AUC на синтетике в слайдах жюри** | время / репутация |
 
 ---
 
@@ -390,7 +390,7 @@ echo "[+] Тестовая активность успешно сгенерир�
 > *Архитектура двухуровневая: при потере связи с кластером система бесшовно переключается на офлайн-снапшот с индикатором X-Data-Source».*
 
 **02:30 — 03:00 | Потенциал и финал**
-> *«Наше решение спроектировано как модульное расширение для штатного radar-ui и готово к работе с public-api и ClickHouse history-api.*  
+> *«Наше решение — модуль рядом с radar-ui: дерево/сеть/таймлайн из **public-api REST** (полный JSON с `sock_arg`). ClickHouse history-api — для индексных полей и объёма, **без** сетевых args в таблице `runtime_events`.*  
 > *OnlyGo превращает терабайты шума в мгновенное понимание инцидента. Спасибо!»*
 
 ---

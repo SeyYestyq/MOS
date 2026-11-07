@@ -20,7 +20,8 @@ RR сам на Go — не значит писать UI на Go.
 
 - Рёбра: `process.exec_id` ← `parent.exec_id` / `parent_exec_id` (не pid/ppid).
 - Атрибуты: binary, arguments, cwd, uid, `in_init_tree`, start_time, time.
-- Сеть: PROCESS_KPROBE → `args[0].sock_arg` (saddr/sport/daddr/dport/family).
+- Сеть: PROCESS_KPROBE → `args[].sock_arg` (не `sockaddr_arg` для tcp_connect/`type: sock`).
+- Родитель: `process.parent_exec_id` или `parent.exec_id`.
 - Timeline: EXEC+EXIT одного exec_id → range; kprobe → point.
 - Bootstrap: отфильтровать cold-start Tetragon по `time`/`start_time`.
 
