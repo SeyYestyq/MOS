@@ -1,4 +1,4 @@
-# Frontend Activity Map (P3)
+# Frontend Activity Map (роль A)
 
 Всё нужное здесь. Не открывать чужие репозитории за стилем.
 

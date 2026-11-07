@@ -1,6 +1,7 @@
 # AGENTS.md (локально / hotel — НЕ коммитить в OnlyGo)
 
-Хакатон: Ночь кода · задача PT · Activity Map на Runtime Radar.
+Хакатон: Ночь кода · задача PT · Activity Map на Runtime Radar.  
+Команда: **3 человека** (A / B / C).
 
 ## Стек (фиксировано)
 
@@ -13,13 +14,12 @@
 
 | Роль | Можно писать | Нельзя |
 |------|--------------|--------|
-| P1 | `scripts/**`, `deploy/**`, сырые dumps в `fixtures/raw/**` | `apps/**` без просьбы |
-| P2 | `apps/bff/**` | `apps/web/**`, корень репо |
-| P3 | `apps/web/**` | `apps/bff/**`, корень репо |
-| P4 | `docs/pitch/**`, `README.md`, pptx | `apps/**` без joint |
-| Integrator (P1 или P2) | корень: `docker-compose.yml`, корневой README merge, package workspaces | — |
+| **A** Frontend+Viz | `apps/web/**` | `apps/bff/**`, корень, docs сдачи |
+| **B** Data/BFF | `apps/bff/**`; корень как integrator | `apps/web/**` без joint |
+| **C** Platform+Docs | `scripts/**`, `deploy/**`, `fixtures/raw/**`, `docs/**`, `CHANGELOG.md`, `BASE.md`, `README.md`, pptx | `apps/**` без просьбы |
 
-**Корень репозитория** (файлы выше `apps/`, `scripts/`, `docs/pitch/`) — только integrator.
+**Корень репозитория** (выше `apps/`, кроме явно отданных C файлов docs/CHANGELOG/BASE/README) — **B** (integrator).  
+C пишет `CHANGELOG.md`, `BASE.md`, `README.md`, `docs/**` без переписывания package/docker без B.
 
 В каждом промпте агенту первой строкой:  
 `Разрешённые пути: … . Всё остальное read-only. Не меняй .gitignore, docker-compose, Makefile без явной просьбы.`
@@ -27,34 +27,33 @@
 ## Контракт
 
 Источник правды: Pydantic в BFF → `/openapi.json`.  
-Markdown CONTRACT — шпаргалка. Breaking change — только на sync команды.
+Breaking change — только на sync команды (ведёт B).
 
 ## Handoff
 
-Предпочтительно: «вот OpenAPI / curl + AC в чате».  
-Markdown в `hotel/handoffs/` — по желанию, не обязателен каждый час.
+Предпочтительно: OpenAPI / curl + AC в чате.  
+`hotel/handoffs/` — опционально.
 
 ## Pacing коммитов в OnlyGo
 
-Не вываливать 40 файлов через 15 минут после старта. Дробить:  
-scaffold → fixture read → tree → timeline → sync click → live RR → polish.
+Не mega-commit через 15 минут. Дробить:  
+scaffold → fixture → tree → timeline/network → sync → summary → live → docs/BASE.
 
 ## Skills
 
-Только `hotel/skills/` (карта — `hotel/SKILLS.md`).  
-Не подключать `claude-skills-main` и чужие skill-репозитории.
+Только `hotel/skills/` (карта — `hotel/SKILLS.md`).
 
 | Роль | Файл |
 |------|------|
-| P1 | `skills/01-platform-rr.md` |
-| P2 | `skills/02-backend-activity-bff.md` |
-| P3 | `skills/03-frontend-activity-map.md` |
-| P4 | `skills/04-pitch-demo.md` + `09-soc-demo-language.md` |
-| Freeze | `skills/05-freeze-review.md` + `08-git-secrets.md` |
-| Стык | `skills/06-handoff-acid.md` |
-| Баг | `skills/07-focused-fix.md` |
-| Опц. | `skills/_borghei/` — выжимка borghei, не грузить пачкой |
+| A | `skills/03-frontend-activity-map.md` (+ `09` для Incident Summary) |
+| B | `skills/02-backend-activity-bff.md` |
+| C | `01-platform-rr.md`, `04-pitch-demo.md`, `10-docs-changelog.md`, `09-soc-demo-language.md` |
+| Все | `08-git-secrets.md` |
+| Freeze | `05-freeze-review.md` |
+| Стык | `06-handoff-acid.md` |
+| Баг | `07-focused-fix.md` |
+| Опц. | `skills/_borghei/` — не грузить пачкой |
 
 ## DoD продукта
 
-Одно окно: process tree + network + timeline + sync; Incident Summary; fixture fallback; README; демо < 60s time-to-insight.
+Одно окно: process tree + network + timeline + sync; Incident Summary; fixture fallback; README; **CHANGELOG**; **BASE.md** (ИИ); демо < 60s; Public.

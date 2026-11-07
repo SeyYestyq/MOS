@@ -1,48 +1,41 @@
 # AGENT BRIEF — Ночь кода / Интерактивная карта активности контейнера
 
-Вставлять агенту **после старта**. Файлы из `МосХаб/hotel/` и `hackathon-kit/` **не коммитить** в OnlyGo как «правила для ИИ».
+Вставлять агенту **после старта**. `МосХаб/hotel/` и правила ИИ **не коммитить** в OnlyGo.
 
 ## Задача
 
-Веб-интерфейс по данным Runtime Radar в **одном окне**:
-1. хронология действий,
-2. дерево процессов (ppid→pid),
-3. сетевые соединения,
-4. аналитик быстро восстанавливает картину внутри контейнера.
+Веб-интерфейс по Runtime Radar в **одном окне**: хронология, дерево процессов, сеть — аналитик ИБ быстро восстанавливает картину.
+
+## Команда (3 роли)
+
+| Роль | Зона | Skill |
+|------|------|-------|
+| **A** Frontend+Viz | `apps/web/**` | `03` (+ `09`) |
+| **B** Data/BFF | `apps/bff/**` (+ integrator) | `02` |
+| **C** Platform+Docs | scripts, fixtures/raw, docs, CHANGELOG, **BASE.md**, pitch | `01` + `04` + `10` |
 
 ## Критерии жюри
 
 30% решение · 25% качество · 20% инновация · 15% презентация · 10% потенциал
 
-## Локальный контекст (диск, не git сдачи)
+## Локальный контекст
 
-- Kind `moshub`, RR ns `runtime-radar`, UI `:9000` admin/Password
-- `МосХаб/hotel/AGENTS.md` + `hotel/skills/0N-….md` по роли — **единственные** инструкции; `claude-skills-main` не читать
-- Стиль **только** `МосХаб/hackathon-kit/design/` (`activity-map.css` = один импорт)
-- Fixture: `МосХаб/hackathon-kit/fixtures/sample-activity.json`
-- Превью: `activity-map-preview` (глаза; в OnlyGo не dump)
+- RR: kind `moshub`, `:9000` (см. `.rr-install/ACCESS.md`)
+- `hotel/AGENTS.md` + skill роли — единственные инструкции
+- Стиль: `hackathon-kit/design/activity-map.css`
+- Fixture: `hackathon-kit/fixtures/sample-activity.json`
+- PDF: `hackathon-kit/refs/Задача_Positive_Technologies_описание_задачи.pdf`
 
-## Стек (зафиксировано)
+## Стек
 
-- Web: Vite + React + TS + **`@xyflow/react` + dagre** (не invent SVG graph math)
-- BFF: FastAPI + **Pydantic** (= OpenAPI); pytest на схему
-- Fixture-first: `X-Data-Source: fixture|live`
-- Live RR: HTTP через reverse-proxy / public-api (см. `.rr-install/ACCESS.md`), не парсинг логов пода
+- Web: Vite + React + TS + **@xyflow/react + dagre**
+- BFF: FastAPI + Pydantic → OpenAPI; fixture-first `X-Data-Source`
+- Live RR: HTTP, не парсинг логов
 
-## Зона агента
+## Сдача (PDF)
 
-В промпте всегда: разрешённые пути только. Корень репо — только integrator.
+Код + документация + презентация + **BASE.md** (базовый файл с блоком ИИ) + демо.
 
-## Инновация (заложить в UI)
+## Pacing / DoD
 
-Помимо Replay: блок **Incident Summary** — текст для SOC по выбранному процессу + copy  
-(пример: pod, pid chain, external IP:port, время).
-
-## Pacing коммитов в OnlyGo
-
-Дробить этапы. Не один mega-commit через 15 минут после старта.  
-В OnlyGo: код, OpenAPI/модели, README, презентация — **без** AGENTS.md/skills/.
-
-## DoD
-
-Tree + network + timeline + sync + Incident Summary; fixture fallback; README; демо time-to-insight < 60s.
+Дробные коммиты. DoD: tree + network + timeline + sync + Incident Summary; fixture; README; CHANGELOG; BASE.md; демо < 60s; без hotel в git.

@@ -8,11 +8,12 @@
 - [ ] Live RR — если работает; иначе честно fixture в UI  
 - [ ] Нет секретов/токенов в OnlyGo  
 - [ ] Нет `AGENTS.md`, `skills/`, `hotel/` в истории коммитов OnlyGo  
-- [ ] Path ownership не сломан (web не в bff и наоборот)  
-- [ ] OpenAPI и UI согласованы (поля дерева/таймлайна есть)  
+- [ ] Path ownership A/B/C не сломан  
+- [ ] OpenAPI и UI согласованы  
 - [ ] Incident Summary копируется  
-- [ ] README: как запустить за < 3 команд  
-- [ ] Коммиты выглядят как этапы, не один dump на 40 файлов в T+15м  
+- [ ] README + **CHANGELOG.md** + **BASE.md** (блок ИИ заполнен)  
+- [ ] Коммиты = этапы, не mega-dump в T+15м  
+
 
 ## Красные флаги в diff
 

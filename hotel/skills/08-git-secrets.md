@@ -10,7 +10,7 @@ docs: README run instructions
 chore(bff): add requirements
 ```
 
-Scopes ночи: `web` | `bff` | `scripts` | `docs` | `fixtures`
+Scopes ночи: `web` (A) | `bff` (B) | `scripts`/`docs` (C) | `fixtures`
 
 Pacing: scaffold → fixture → tree → timeline → sync → live → polish.  
 Не mega-commit на 40 файлов в T+15м.

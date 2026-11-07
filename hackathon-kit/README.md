@@ -6,9 +6,9 @@
 
 | Папка | Что | В OnlyGo? |
 |-------|-----|-----------|
-| `hackathon-kit/` | дизайн-токены, fixture JSON, черновик контракта, snippets | после старта — **по частям** в код (не dump) |
-| `../hotel/` | AGENTS.md, skills, промпты агентов | **никогда** |
-| `../activity-map-preview/` | визуальный превью стиля | никогда |
+| `hackathon-kit/` | дизайн, fixture, stubs (в т.ч. BASE/CHANGELOG/docs), план, PDF refs | после старта — **по частям** |
+| `../hotel/` | AGENTS.md, skills A/B/C | **никогда** |
+| `../activity-map-preview/` | превью стиля | никогда |
 
 ## Что здесь
 

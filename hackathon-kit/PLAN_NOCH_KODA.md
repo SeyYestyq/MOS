@@ -1,270 +1,241 @@
 # Полный план команды OnlyGo — «Ночь кода 2026»
 
 **Задача:** Интерактивная карта активности контейнера (Positive Technologies / Runtime Radar)  
-**Команда:** 4 человека  
+**Команда:** **3 человека** (у каждого свой список задач)  
 **Репо сдачи:** `OnlyGo` на Мос.Хаб (`git@hub.mos.ru:event_DIT/2026/onlygo.git`)  
-**Сейчас в репо:** только PDF требований/критериев + шаблон презентации  
+**Официальное описание:** `hackathon-kit/refs/Задача_Positive_Technologies_описание_задачи.pdf`
+
+Эксперт на площадке (Святослав Сорокин, PT / Runtime Radar): цель — помочь аналитику ИБ **быстро восстановить картину** в контейнере: порядок действий, дерево процессов, события, сеть — **в одном UX**, а не в «диком списке» Events.
 
 ---
 
-## 0. Жёсткое правило организаторов (читать всем)
+## 0. Жёсткое правило организаторов
 
-Из письма Мос.Хаб:
-
-> Код решения пишем **только на площадке**. Установить и проверить ПО нужно заранее, а писать код задачи — **только после старта** хакатона. Жюри смотрит **историю коммитов** в проекте на Мос.Хаб, поэтому **заготовки, принесённые с собой, будут видны**.
-
-### Что можно ДО старта (7.11)
-
-| Можно | Нельзя |
-|--------|--------|
-| Ставить Docker, kubectl, helm, kind, браузер, IDE | Пушить код решения в OnlyGo |
-| Поднять Runtime Radar локально, проверить Events | Коммитить AGENTS.md / skills / UI / BFF в OnlyGo заранее |
-| Читать ТЗ, критерии, презентацию | Копировать готовый `activity-map-preview` в OnlyGo до старта |
-| Держать **локально** шпаргалки: `hackathon-kit/` + `hotel/` | Считать kit «уже сданным»; пушить AGENTS/skills в OnlyGo |
-
-**Локальные папки (НЕ в OnlyGo git):**
-
-- `МосХаб/hotel/` — **AGENTS.md, skills, промпты агентов** (агенты читают с диска; в Mos.Хаб не коммитим)  
-- `МосХаб/hackathon-kit/` — дизайн, fixture, план, черновик контракта  
-- `МосХаб/activity-map-preview/` — превью стиля  
-- `МосХаб/.rr-install/` — ключи RR (секреты)  
-
-После старта в OnlyGo: только **код решения** + README/презентация, дробными коммитами. Правила ИИ остаются в `hotel/`.
+Код решения — **только после старта**. Жюри смотрит историю коммитов.  
+Локально держим `hotel/` + `hackathon-kit/` + preview; в OnlyGo до старта — не пушить apps/AGENTS/skills.
 
 ---
 
-## 1. Продуктовая рамка для задачи PT
+## 1. Что сказал эксперт → как закрываем
 
-### Проблема → гипотеза
+### Продукт (слайд «О задаче»)
 
-**Проблема:** аналитику ИБ/DevSecOps по логам Runtime Radar тяжело за минуты собрать картину «что произошло внутри контейнера»: процессы разрознены, сеть отдельно, хронология в табличке.
+Веб-интерфейс по данным Runtime Radar: в **едином** окне  
+хронология + дерево процессов (ppid→pid) + события + сеть.  
+Пользователь: аналитик ИБ. Метрика питча: **time-to-insight < 60 с**.
 
-**Гипотеза (проверяемая на демо):**  
-Если в одном окне показать дерево процессов + сетевые связи + таймлайн с синхронизацией клика, то аналитик восстановит цепочку атаки (например reverse-shell) за < 60 секунд без ручного grep.
+### Необходимые компетенции (слайд «НЕОБХОДИМЫЕ») → роли
 
-**Не питчить:** «мы сделали красивый UI».  
-**Питчить:** «мы сокращаем время расследования инцидента в контейнере».
+| # | Компетенция эксперта | Кто у нас |
+|---|----------------------|-----------|
+| 01 Фронтенд | веб / UI | **A — Frontend** |
+| 02 Визуализация | графы, деревья, таймлайны; **готовые либы ok** | **A — Frontend** (React Flow + dagre) |
+| 03 Данные | работа с выгрузками событий | **B — Data / BFF** |
+| 04 Kubernetes | базовая контейнеризация / kind / Helm | **C — Platform + Docs** |
 
-### Для кого
+### Подготовка данных RR (слайд «ПОДГОТОВКА ДАННЫХ») — чеклист C (+ B принимает dump)
 
-Целевой пользователь на питче: **SOC / container security analyst**.  
-Боль: время от алерта RR до понимания process tree + сетевого C2.  
-Ценность: один экран вместо трёх вкладок Runtime Radar.
+1. **Развернуть Runtime Radar** — Helm в kind/minikube/k3s, eBPF/BTF; docs quickstart.  
+2. **Настроить сбор** — Sources; Runtime → Parameters → Allow filter на ns (напр. `hackathon`); сохранение **All**; Apply.  
+3. **Тестовая активность** — поды в `hackathon`; `kubectl exec`: `ls`/`cat`/`sleep`; дети через `sh -c`; повторы `curl`/`wget` с паузами.  
+4. **Проверить** — Runtime → Events: тестовые контейнеры и детали видны.  
 
-### Метрики успеха на хакатоне
-
-| Метрика | Цель на ночь |
-|---------|----------------|
-| Time-to-insight на демо | < 60 сек от открытия UI до «вот цепочка» |
-| Покрытие ТЗ | tree + timeline + network в одном окне |
-| Стабильность демо | fallback fixture если RR мёртв |
-| История git | чистые conventional commits после старта |
-
-### Структура питча (~3–5 мин, шаблон финалиста в OnlyGo)
-
-1. **Крючок (15–20 сек):** «Контейнер уже скомпрометирован. В логах тысяча строк. Сколько минут до понимания?»  
-2. **Проблема:** Runtime Radar даёт события, но не «картину в одном окне».  
-3. **Продукт:** Activity Map — дерево / сеть / хронология, клик синхронизирует всё.  
-4. **Демо (90–120 сек):** live или fixture reverse-shell.  
-5. **Потенциал:** встраивание рядом с RR, replay, экспорт в SOC.  
-6. **Команда / стек (20 сек).**  
-
-Говорить коротко и по делу: один главный месседж — «это ускоряет расследование».
+У нас локально RR уже поднимали; ночью C повторяет 2–4 и кормит B свежим dump. Fallback: `hackathon-kit/fixtures/sample-activity.json`.
 
 ---
 
-## 2. Критерии жюри → как закрываем
+## 2. Три человека — списки задач
 
-| Критерий | Вес | Как закрываем |
-|----------|-----|----------------|
-| Решение задания | 30% | Одно окно: хронология + tree процессов + сеть по данным RR |
-| Качество | 25% | Чистый UI, контракт API, README, стабильный fallback |
-| Инновационность | 20% | Replay цепочки / корреляция process↔net / «детектив»-режим |
-| Презентация и команда | 15% | Сценарий питча + роли на демо |
-| Потенциал | 10% | Roadmap: webhook в SIEM, multi-cluster, SDK детекторов |
+Sync каждые **45–60 мин**, 5 минут. Integrator контракта = **B**. Корень репо = **B** (или C по просьбе B).
 
----
+### A — Frontend + визуализация
 
-## 3. Роли (4 человека) + работа с нейроагентами
+**Зона:** только `apps/web/**`  
+**Skill:** `hotel/skills/03-frontend-activity-map.md` (+ `09` для Incident Summary)
 
-Все четверо работают **с нейросетями**. Поэтому главное — не «у каждого своя ветка навсегда», а **границы зон** и **handoff с критериями приёмки**, чтобы агент P3 не начал «улучшать» BFF P2.
+| # | Задача | AC |
+|---|--------|-----|
+| A1 | Vite React TS scaffold + `activity-map.css` из kit | UI открывается |
+| A2 | Типы из OpenAPI BFF / `stubs/types.ts` | fetch `/api/activity` |
+| A3 | Process tree на **@xyflow/react + dagre** | ppid→pid, роли цветов |
+| A4 | Network panel | edges видны, клик выделяет |
+| A5 | Timeline | события по времени |
+| A6 | Selection sync между тремя панелями | один selected id |
+| A7 | **Incident Summary** + Copy | текст SOC по шаблону |
+| A8 | Replay (если успеем) | scrub по таймлайну |
+| A9 | Не трогать BFF/корень; pacing коммитов | см. §4 |
 
-| Роль | Зона файлов (агенту можно трогать только это) | До старта | После старта |
-|------|-----------------------------------------------|-----------|--------------|
-| **P1 Platform** | `scripts/`, `deploy/`, `fixtures/` (сырые дампы RR) | Docker/kind/RR живы | gen-activity, port-forward, экспорт events |
-| **P2 Backend** | `apps/bff/**`, `docs/CONTRACT.md` | Контракт в голове | `/api/activity`, normalize, fixture fallback |
-| **P3 Frontend** | `apps/web/**`, `apps/web` styles | Preview стиля глазами | tree + network + timeline + sync |
-| **P4 Pitch** | `docs/pitch/**`, `README.md`, презентация | Черновик **локально** | слайды, демо-скрипт, тайминг |
-
-**Общее (никто не ломает без синка):** схема папок, OpenAPI/Pydantic-контракт; правила агентов — только в `hotel/AGENTS.md`.
-
-Sync: каждые **60–90 мин**, 5 минут: что готово / что блочит / кого ждём по handoff.
-
-### Как работать вместе, если у всех агенты
-
-**1. Ownership по директориям (главное правило)**  
-Path ownership — в `hotel/AGENTS.md`. Промпт агенту всегда начинать с:  
-«Работай только в `apps/web/**`. Чужие папки не менять. Контракт API — read-only.»
-
-**2. Контракт раньше кода**  
-Первый час: заморозить `GET /api/activity` (shape из `stubs/CONTRACT.md`).  
-FE и BE агенты стыкуются по JSON, а не «как получится». Breaking change контракта — только на sync и с апдейтом обеих сторон.
-
-**3. Не «четыре бесконечные ветки», а короткие MR + один integrator**  
-- Общая линия: `main` (или `develop`) после старта.  
-- Короткоживущие ветки под задачу: `feat/bff-fixture`, `feat/web-tree` — мерж как только AC зелёные.  
-- Один **integrator** (обычно P2 или капитан) принимает MR и гоняет smoke.  
-Личные ветки «на всю ночь» с AI почти всегда расходятся и больно склеиваются.
-
-**4. Стык ролей = код контракта, не бумажный ад**  
-P2 с первого коммита BFF фиксирует **Pydantic-модели** → FastAPI отдаёт `/openapi.json`.  
-P3 генерит TypeScript-типы из OpenAPI. Проверка стыка: `pytest` на схему + `curl`.  
-Markdown handoff в `hotel/handoffs/` — опционально; в чате достаточно AC + ссылка на OpenAPI.
-
-**5. ACID приёмки (локально в `hotel/skills/06-handoff-acid.md`)**  
-
-| Буква | Смысл |
-|-------|--------|
-| **A**cceptance | явные критерии готовности |
-| **C**ontract | OpenAPI/Pydantic не ломаем без синка |
-| **I**solation | агент только в своей папке; корень — integrator |
-| **D**emo-ready | curl или клик проверки |
-
-**6. Чужое улучшать** только после явного handoff/AC или joint-сессии.
+**Не делает:** Helm/RR UI-настройку, Pydantic, слайды (может помочь C 10 мин на скрины).
 
 ---
 
-## 4. Правила агентов живут в `hotel/` — не в OnlyGo
+### B — Данные / BFF
 
-Согласовано с риском «идеальный AGENTS.md через 5 минут после старта»:
+**Зона:** `apps/bff/**`, fixture в bff, OpenAPI  
+**Skill:** `hotel/skills/02-backend-activity-bff.md`
 
-- **`МосХаб/hotel/AGENTS.md`** + **`hotel/skills/`** + **`hotel/prompts/`** — на диске для Cursor/агентов.  
-- В OnlyGo **не коммитим** AGENTS.md / skills / промпты.  
-- При необходимости: `OnlyGo/.git/info/exclude` (локально), чтобы случайно не закоммитить.  
-- Skills только в `hotel/skills/` (+ `hotel/SKILLS.md`); `claude-skills-main` агентам не подключать.
+| # | Задача | AC |
+|---|--------|-----|
+| B1 | FastAPI + Pydantic `ActivityPayload` | `/openapi.json` |
+| B2 | `GET /api/activity` + чтение fixture | `X-Data-Source: fixture` |
+| B3 | Normalize dump от C → наша схема | pytest схемы зелёный |
+| B4 | Live-клиент RR HTTP `:9000` (бонус) | fallback на fixture при ошибке |
+| B5 | Integrator: мерж MR A/C по контракту | smoke curl + UI |
+| B6 | Корень: docker-compose/workspaces только B | без секретов |
 
-### Что коммитить в OnlyGo после старта (pacing)
-
-1. `chore: scaffold apps/web and apps/bff`  
-2. `feat: pydantic activity models + fixture endpoint`  
-3. `feat: process tree with xyflow`  
-4. `feat: timeline + network panels`  
-5. `feat: selection sync + incident summary`  
-6. `feat: live Runtime Radar client` (когда стабильно)  
-7. `docs: README and demo notes`  
-
-Не вываливать 40 файлов одним коммитом через 15 минут.
-
-### Стек UI/API (зафиксировано в hotel)
-
-- Web: **`@xyflow/react` + dagre** — не invent SVG graph math  
-- BFF: FastAPI + Pydantic  
-- Fixture-first с `X-Data-Source`  
-- Корень репо: только integrator (P1/P2)
+**Не делает:** React Flow, долгий тюнинг kind (это C).
 
 ---
 
-## 5. Архитектура решения
+### C — Platform (K8s/RR) + питч + changelog/docs
+
+**Зона:** `scripts/**`, `deploy/**`, `fixtures/raw/**`, `docs/**`, `CHANGELOG.md`, `README.md`, pptx  
+**Skills:** `01-platform-rr.md`, `04-pitch-demo.md`, `08-git-secrets.md`, `09-soc-demo-language.md`, `10-docs-changelog.md`
+
+| # | Задача | AC |
+|---|--------|-----|
+| C1 | RR up: port-forward `:9000`, pods Ready | UI логин |
+| C2 | Sources + Allow filter ns `hackathon` (или default) + All | Events не пустые |
+| C3 | Скрипт тестовой активности (exec + curl loop) | дерево/сеть в Events |
+| C4 | Dump сырых событий → `fixtures/raw/` для B | файл + короткий note |
+| C5 | Fixture fallback всегда под рукой | демо без кластера |
+| C6 | **docs/** + **CHANGELOG.md** (правило §5) | после каждой крупной фичи |
+| C7 | README: 3 команды запуска | жюри поднимает |
+| C8 | **`BASE.md`** — базовый файл сдачи (+ блок ИИ) | см. §2.1 |
+| C9 | Презентация + демо-скрипт < 60 с | репетиция 2× |
+| C10 | Freeze-чеклист с A/B (`05-freeze-review`) | Public visibility |
+
+**Не делает:** компоненты xyflow, модели Pydantic (кроме передачи dump).
+
+### 2.1 Формат сдачи (из PDF PT)
+
+Публичный проект на Мос.Хаб должен содержать:
+
+| Артефакт | Кто | Где в OnlyGo |
+|----------|-----|--------------|
+| Исходный код веб-интерфейса (+ BFF) | A, B | `apps/web`, `apps/bff` |
+| Документация | C | `docs/`, `README.md` |
+| **Базовый файл** | C (факты от A/B) | **`BASE.md`** в корне |
+| Презентация | C | pptx / `docs/pitch/` |
+| Демо жюри | все, ведёт C | сценарий `docs/DEMO.md` |
+
+**`BASE.md` (обязательно по PDF)** — текстовый файл о ПО:
+
+- что сделано и для кого (аналитик ИБ / Runtime Radar);
+- стек и как запустить;
+- **какие ИИ-инструменты использовались и на каких этапах**;
+- что ключевые решения осмыслены командой;
+- для ИБ: сгенерированный код просмотрен (секреты, небезопасные практики).
+
+Шаблон: `hackathon-kit/stubs/BASE.md` → копировать в OnlyGo после старта.  
+Правила ведения: `hotel/skills/10-docs-changelog.md`.
+
+Общие рамки PDF: команда 3–5 чел., ≤8 часов на площадке, ИИ разрешён и приветствуется; права/публичность — по регламенту Мос.Хаб.
+
+---
+
+## 3. Продуктовая рамка и критерии
+
+| Критерий | Вес | Как |
+|----------|-----|-----|
+| Решение | 30% | одно окно: timeline + tree + network |
+| Качество | 25% | UI, контракт, README, fixture |
+| Инновация | 20% | Incident Summary (+ Replay) |
+| Презентация | 15% | C ведёт; A/B на демо у экрана |
+| Потенциал | 10% | Now/Next/Later в слайдах |
+
+**Питч:** не «красивый граф», а «сокращаем время расследования для SOC».
+
+---
+
+## 4. Агенты, зоны, pacing
+
+Правила — только в `МосХаб/hotel/` (не в OnlyGo).
+
+Промпт агенту:  
+`Разрешённые пути: … . Чужое read-only. Не меняй корень без роли B.`
+
+Стек: Web = Vite/React/xyflow/dagre · BFF = FastAPI/Pydantic · fixture-first.
+
+Коммиты дробить: scaffold → fixture → tree → timeline/network → sync → summary → live → docs.
+
+---
+
+## 5. Документация и CHANGELOG (как идея gotender, упрощённо)
+
+В OnlyGo **после старта** (пишет **C**, факты дают A/B):
 
 ```
-┌─────────────────┐     ┌──────────────────┐     ┌────────────────────────────┐
-│ Runtime Radar   │────▶│ Activity BFF     │────▶│ Web: Activity Map          │
-│ HTTP via :9000  │     │ Pydantic+OpenAPI │     │ xyflow tree | Network |    │
-│ (or fixture)    │     │ X-Data-Source    │     │ Timeline | Incident Summary│
-└─────────────────┘     └──────────────────┘     └────────────────────────────┘
+docs/
+  README.md          # оглавление docs
+  DEMO.md            # сценарий жюри < 60 с
+  architecture.md    # 10–20 строк: RR → BFF → Web
+CHANGELOG.md         # журнал изменений ночи (корень)
+BASE.md              # обязательный «базовый файл» сдачи (ИИ + описание)
+reports/             # опционально короткие SUMMARY_*.md после крупного куска
 ```
 
-**MVP UX (ТЗ):** выбор пода; дерево процессов; сеть; хронология; sync по клику.
+**Правило changelog (обязательно):**
 
-**Инновация (20%):**  
-1) Replay по таймлайну;  
-2) **Incident Summary** — карточка для SOC (текст + copy) по выбранному узлу.
+1. После мержа осмысленного этапа (не каждый микрокоммит) — запись в `CHANGELOG.md`:  
+   дата/время · кто (A/B/C) · что сделано · как проверить.  
+2. Conventional commits в git (`feat(web):`, `feat(bff):`, `docs:`, `fix:`).  
+3. Крупный кусок (tree готов / live RR / summary) → опционально `reports/SUMMARY_<тема>_YYYY-MM-DD.md` на 5–15 строк.  
+4. Перед freeze — заполнить **`BASE.md`** (ИИ-этапы актуальны).  
+5. Не писать секреты RR в docs / BASE.  
+6. AGENTS/skills в docs **не** класть.
 
-**Данные:** `fixtures/sample-activity.json`; live — HTTP API RR (см. § ниже).
-
-### Как забираем события из живого Runtime Radar
-
-Уже нащупан путь через **HTTP reverse-proxy** (`https://localhost:9000`), UI/API под admin-токеном (см. `.rr-install/ACCESS.md`, history/events в Runtime UI).  
-План BFF: клиент к known REST endpoints public-api / history (уточнить по OpenAPI/Network tab в браузере в T0), нормализация в Pydantic.  
-**Не** парсить stdout логов контейнера как основной путь.  
-Если live мёртв — fixture, честно в UI/README.
+Шаблоны: `hackathon-kit/stubs/docs/`, `stubs/CHANGELOG.md`, `stubs/BASE.md` — копировать в OnlyGo после старта.
 
 ---
 
-## 6. Чеклист ДО старта (сегодня / до 7.11 вечера)
+## 6. Архитектура
 
-### Инфра (P1 + все)
+```
+Runtime Radar (:9000) ──▶ BFF (Pydantic/OpenAPI) ──▶ Web (xyflow + panels + Incident Summary)
+         │                        ▲
+         └── dump / fixture ──────┘
+```
 
-- [ ] `docker info` ок  
-- [ ] kind cluster `moshub` / `kubectl get nodes`  
-- [ ] Runtime Radar pods Running; UI `https://localhost:9000` (admin / Password)  
-- [ ] Clusters: kind-moshub Connected; Runtime → Events не пустые  
-- [ ] Не включать `kernel-modules` на Docker Desktop kind  
-- [ ] SSH к hub.mos.ru работает; OnlyGo clone ок  
-- [ ] В OnlyGo видны 2 PDF + pptx  
-
-### Команда
-
-- [ ] Распределены роли P1–P4  
-- [ ] Все прочитали критерии и карточку ТЗ  
-- [ ] Все видели локальный preview стиля (`activity-map-preview` :5177)  
-- [ ] Договорились: **ноль пушей кода в OnlyGo до старта**  
-- [ ] Черновик питча у P4 локально (Google Doc / файл не в OnlyGo)  
-
-### Запрещённый «предкоммит» / не светить ИИ-инструкции
-
-- [ ] Нет `apps/`, решения, `AGENTS.md`, `skills/` в OnlyGo до старта  
-- [ ] После старта тоже не коммитить AGENTS/skills — они в `hotel/`  
-- [ ] Секреты `.rr-install` не в git  
+Live: HTTP API, не парсинг логов. См. `.rr-install/ACCESS.md`.
 
 ---
 
-## 7. План ночи (после официального старта)
+## 7. Чеклист до старта
 
-### T0 (первые 20–30 мин) — Kickoff на репо
-
-1. Все pull OnlyGo.  
-2. **Не** пушить AGENTS/skills — открыть `МосХаб/hotel/AGENTS.md` локально у агентов.  
-3. P2: scaffold BFF + Pydantic models (первый нормальный коммит кода).  
-4. Standup: зоны + кто integrator.
-
-### T1 (час 1–2) — Scaffold / fixture-first
-
-- P2: fixture endpoint + OpenAPI + pytest схемы  
-- P3: Vite React + xyflow + токены стиля (по частям из kit)  
-- P1: scripts port-forward / gen-activity  
-- P4: презентация в OnlyGo **после старта**, короткими docs-коммитами
-
-### T2–T4 — Core MVP
-
-- P3: Process tree SVG + timeline + network panels + selection sync  
-- P2: normalize live RR events (если API доступен) + merge с fixture  
-- P1: стабильный demo-pod сценарий  
-- P4: минутный сценарий демо, скринкаст-страховка  
-
-### T4–T6 — Polish + innovation
-
-- Replay button  
-- **Incident Summary** (SOC-карточка + copy)  
-- Фильтры по типу события  
-- Seamless `X-Data-Source: fixture|live`  
-- README: 3 команды  
-
-### T6–T7 — Freeze
-
-- E2E с нуля на одном ноутбуке  
-- Public visibility OnlyGo  
-- Репетиция питча 2×  
-- CHANGELOG / список коммитов для жюри  
+- [ ] Docker / kind / RR / Events (C)  
+- [ ] Fixture + design pack на диске  
+- [ ] Роли A/B/C понятны всем  
+- [ ] Ноль кода решения в OnlyGo до сигнала  
+- [ ] hotel/ открыт у агентов локально  
 
 ---
 
-## 8. Что делать с kit / hotel / preview
+## 8. План ночи
 
-- `hotel/` — промпты и AGENTS для агентов на диске.  
-- `hackathon-kit/` — стиль + fixture + план.  
-- Писать код в OnlyGo **с нуля после старта**, ориентируясь на kit, без dump и без коммита hotel.  
-- Pacing: естественные инженерные коммиты (§4).  
+### T0 (20–30 мин)
+- Pull OnlyGo; hotel локально  
+- B: scaffold BFF + Pydantic  
+- A: scaffold web + css  
+- C: RR filter + gen-activity; скопировать `stubs/docs` → `docs/`, `stubs/CHANGELOG.md`, `stubs/BASE.md`
+
+### T1–T2
+- B: fixture API + pytest  
+- A: tree xyflow  
+- C: dump для B; первая запись changelog
+
+### T2–T4
+- A: network + timeline + sync  
+- B: normalize (+ live если успеет)  
+- C: DEMO.md + слайды каркас
+
+### T4–T6
+- A: Incident Summary (+ Replay)  
+- B: стабильный fallback  
+- C: README, changelog, черновик BASE.md (ИИ), репетиция
+
+### T6–T7 Freeze
+- E2E на одном ноуте; дописать BASE.md; Public; питч 2×
 
 ---
 
@@ -272,32 +243,29 @@ Markdown handoff в `hotel/handoffs/` — опционально; в чате д
 
 | Риск | Митигация |
 |------|-----------|
-| Жюри видит предкоммиты | Не пушить код до старта |
-| RR monitor падает на kind | Fixture + честный README |
-| Docker down ночью | P1 чеклист; второй ноут |
-| Рассинхрон FE/BE | Контракт с T0, breaking freeze после T3 |
-| Питч без демо | Скринкаст + fixture mode |
+| 3 человека, мало рук на питч | C совмещает docs+питч; A/B не отвлекаются |
+| RR/eBPF на kind | fixture-first |
+| Рассинхрон FE/BE | OpenAPI с T0, integrator B |
+| Нет истории для жюри | changelog + дробные коммиты |
 
 ---
 
-## 10. Definition of Done
+## 10. DoD
 
-- [ ] В OnlyGo после старта есть история коммитов решения  
-- [ ] UI: хронология + дерево процессов + сеть в одном окне  
-- [ ] Данные из RR и/или явный fixture fallback  
-- [ ] README + презентация  
-- [ ] 3-мин демо отрепетировано  
-- [ ] Visibility Public (как требуют правила сдачи)  
-- [ ] Секретов в репо нет  
+- [ ] Tree + network + timeline + sync  
+- [ ] Incident Summary  
+- [ ] Fixture и/или live  
+- [ ] README + CHANGELOG + **BASE.md** + презентация  
+- [ ] Демо < 60 с  
+- [ ] Public, без секретов и без hotel в git  
 
 ---
 
-## 11. Быстрые ссылки локально
+## 11. Ссылки
 
-- План: этот файл  
-- **Hotel (агенты):** `../hotel/` — AGENTS, skills, prompts  
-- Стиль / fixture: `design/`, `fixtures/`  
-- Контракт-черновик: `stubs/CONTRACT.md` (в коде — Pydantic)  
-- Preview: `../activity-map-preview` → http://127.0.0.1:5177/  
-- RR доступ: `../.rr-install/ACCESS.md`  
-- Skills: `../hotel/SKILLS.md` + `../hotel/skills/` (claude-skills-main не использовать)  
+- Hotel: `../hotel/`  
+- Design: `design/activity-map.css`  
+- Fixture: `fixtures/sample-activity.json`  
+- Docs stubs: `stubs/docs/`, `stubs/BASE.md`, `stubs/CHANGELOG.md`  
+- PDF задачи: `refs/Задача_Positive_Technologies_описание_задачи.pdf`  
+- RR: `../.rr-install/ACCESS.md`  

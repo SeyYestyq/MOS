@@ -1,10 +1,11 @@
-# Pitch / Demo (P4)
+# Pitch / Demo (роль C)
 
-Всё нужное здесь. Не открывать roadmap-communicator / product-strategist целиком.
+Всё нужное здесь. Не открывать roadmap-communicator целиком.
 
 ## Зона
 
-`docs/pitch/**`, `README.md`, слайды. Не править `apps/**` без joint.
+`docs/pitch/**`, `README.md`, слайды, совместно с `10-docs-changelog.md` (`BASE.md`, `DEMO.md`).  
+Не править `apps/**` без joint.
 
 ## Структура питча (5–7 мин)
 

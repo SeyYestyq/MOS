@@ -1,10 +1,10 @@
-# Backend Activity BFF (P2)
+# Backend Activity BFF (роль B)
 
-Всё нужное здесь. Не открывать `claude-skills-main` / senior-backend.
+Всё нужное здесь. Не открывать senior-backend целиком.
 
 ## Зона
 
-Только `apps/bff/**`. Корень / web — read-only.
+`apps/bff/**` + роль integrator корня. Web — read-only.
 
 ## Стек
 
