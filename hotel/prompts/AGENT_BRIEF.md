@@ -1,6 +1,8 @@
 # AGENT BRIEF — Activity Map (PT / Runtime Radar)
 
-После старта. `hotel/` в OnlyGo **не** коммитить.
+После старта работаем **только в OnlyGo** (Мос.Хаб).  
+`hotel/` (скиллы) — отдельная папка на диске, в OnlyGo **не** коммитить.  
+Stubs из `hackathon-kit/` — перенести в OnlyGo и реализовывать план там; prep/MOS не продолжать.
 
 ## Задача
 

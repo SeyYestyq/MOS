@@ -1,5 +1,33 @@
-hackathon-kit/ и hotel/ и activity-map-preview/ — ЛОКАЛЬНАЯ подготовка.
-Не git add / не push в OnlyGo / Mos.Hub до старта и не как «первый идеальный AGENTS.md».
+═══════════════════════════════════════════════════════════════
+  ГДЕ РАБОТАЕМ (читать всей команде до первого коммита)
+═══════════════════════════════════════════════════════════════
 
-После старта в OnlyGo коммитить: код apps/, README, презентацию, контракт (Go structs + types.ts).
-AGENTS.md и skills/ держать в МосХаб/hotel/ (агенты читают с диска).
+1) Репозиторий СДАЧИ и ВСЯ разработка кода:
+   OnlyGo на «Мос.Хаб»
+   git@hub.mos.ru:event_DIT/2026/onlygo.git
+
+   После старта: клонируете OnlyGo → переносите заготовки из
+   hackathon-kit/ → пишете apps/web, apps/bff, scripts, docs
+   ТОЛЬКО там. История коммитов OnlyGo = то, что видит жюри.
+
+2) Этот репозиторий (github.com/SeyYestyq/MOS, ветка prep)
+   = только подготовка / бэкап плана и stubs.
+   НЕ место, где «живёт» продукт. Не продолжать фичи здесь.
+   Не считать MOS «основным репом команды».
+
+3) Скиллы и правила агентов — ОТДЕЛЬНАЯ папка, НЕ в OnlyGo:
+   МосХаб/hotel/   (AGENTS.md, skills/, prompts/)
+   Агенты и люди читают hotel с диска рядом с клоном OnlyGo.
+   В git OnlyGo: НЕ добавлять hotel/, AGENTS.md, skills/,
+   activity-map-preview/, .cursor/, секреты RR.
+
+4) Что переносить в OnlyGo после старта (по частям, как код):
+   - stubs/bff → apps/bff
+   - stubs/web + design → apps/web
+   - stubs/types.ts, CONTRACT → контракт в репе
+   - fixtures/sample-activity.json → apps/bff/fixtures
+   - stubs/docs, CHANGELOG.md, BASE.md → корень / docs
+   - PLAN_NOCH_KODA.md — ориентир; в OnlyGo можно краткий README
+
+5) Жюри смотрит историю OnlyGo. Не заливать «идеальный»
+   prep одним коммитом. Scaffold → fixture → фичи → live → docs.

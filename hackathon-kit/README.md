@@ -1,21 +1,24 @@
-# Hackathon Kit — материалы для Ночи кода (локально)
+# Hackathon Kit — подготовка к Ночи кода
 
-**Не пушить целиком в OnlyGo.** Жюри смотрит историю коммитов.
+## Где работает команда
 
-## Разделение
+| Место | Роль |
+|-------|------|
+| **OnlyGo** (`git@hub.mos.ru:event_DIT/2026/onlygo.git`) | **единственный** репозиторий разработки и сдачи |
+| **этот MOS / prep** | бэкап плана и заготовок; **не** писать сюда фичи продукта |
+| **`../hotel/`** | AGENTS + skills — **отдельная папка на диске**, в OnlyGo **никогда** |
+
+После старта: клон OnlyGo → `cp` stubs/design/fixtures из kit → реализация плана в OnlyGo.  
+Подробно: `DO_NOT_PUSH.txt`, `../hotel/prompts/QUICK_START_FOR_TEAM.md`.
+
+## Что здесь (источник для переноса)
 
 | Папка | Что | В OnlyGo? |
 |-------|-----|-----------|
-| `hackathon-kit/` | дизайн, fixture, stubs (в т.ч. BASE/CHANGELOG/docs), план, PDF refs | после старта — **по частям** |
-| `../hotel/` | AGENTS.md, skills A/B/C | **никогда** |
-| `../activity-map-preview/` | превью стиля | никогда |
+| `design/` | `activity-map.css` + tokens / STYLE_GUIDE | да → `apps/web/src/styles/` |
+| `fixtures/` | `sample-activity.json` | да → `apps/bff/fixtures/` |
+| `stubs/` | Go BFF, web stubs, CONTRACT, types, BASE, CHANGELOG, docs | да → `apps/*`, корень |
+| `PLAN_NOCH_KODA.md` | план победы | ориентир; в OnlyGo — README по делу |
+| `refs/` | PDF / заметки по материалам RR | локально / по желанию |
 
-## Что здесь
-
-- `design/` — готовый стиль: `activity-map.css` (+ tokens, topology, xyflow-theme, STYLE_GUIDE)
-- `fixtures/sample-activity.json` — дамп сценария reverse-shell
-- `stubs/` — CONTRACT, types, bff/web stubs (реализация пишется в OnlyGo после старта)
-- `snippets/tree-layout.ts` — запасной; **UI: React Flow + dagre** (hotel)
-- `PLAN_NOCH_KODA.md` — план команды
-
-Правила агентов: **`../hotel/`**.
+Правила агентов: **`../hotel/`** (не коммитить).
